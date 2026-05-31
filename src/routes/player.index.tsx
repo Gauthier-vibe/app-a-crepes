@@ -139,6 +139,22 @@ function FichePage() {
         </div>
       </section>
 
+      {/* Histoire publique */}
+      <section className="paper-texture rounded-2xl border border-border shadow-paper p-4">
+        <div className="flex items-start gap-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
+            <BookText className="h-4 w-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Histoire publique
+            </p>
+            <p className="mt-1 text-sm text-foreground/90 leading-relaxed">
+              {character.publicStory}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Alibi & consigne de jeu (suspects uniquement) */}
       {!character.isInvestigator && (
@@ -284,10 +300,7 @@ function FichePage() {
       )}
 
       {/* Accordéons */}
-      <Accordion type="multiple" defaultValue={["story"]} className="space-y-3">
-        <AccordionShell value="story" icon={BookText} label="Histoire publique">
-          <p className="text-sm leading-relaxed text-foreground/90">{character.publicStory}</p>
-        </AccordionShell>
+      <Accordion type="multiple" className="space-y-3">
 
         <AccordionShell
           value="secrets"
