@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, Target, ShieldAlert, MessageSquareQuote } from "lucide-react";
+import { Eye, Sparkles, ShieldAlert, MessageSquareQuote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { characters, getObjectivesFor, type CharacterId } from "@/data/mock";
+import { characters, type CharacterId } from "@/data/mock";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
 import { toast } from "sonner";
 
@@ -58,7 +58,6 @@ function GmDashboard() {
       <h2 className="font-serif text-2xl mb-3">Personnages</h2>
       <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {characters.map((c) => {
-          const objectives = getObjectivesFor(c.id);
           const row = byId(c.id);
           return (
             <li
@@ -95,12 +94,10 @@ function GmDashboard() {
 
               <div className="mt-3 flex items-center gap-3 text-[11px] text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <Target className="h-3 w-3" /> {objectives.length} objectifs
-                </span>
-                <span className="flex items-center gap-1">
                   <Sparkles className="h-3 w-3 text-gold" /> {cluesUnlocked[c.id] ?? 0} indice(s) envoyés
                 </span>
               </div>
+
 
               {!c.isInvestigator && (
                 <div className="mt-3 rounded-md border border-primary/30 bg-primary/5 p-2.5">

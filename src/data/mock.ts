@@ -27,8 +27,6 @@ export type CharacterId =
   | "claire"
   | "victorine";
 
-export type ObjectiveStatus = "pending" | "done" | "failed";
-
 export interface HiddenRole {
   name: string;
   power: string;
@@ -65,14 +63,6 @@ export interface Secret {
   characterId: CharacterId;
   title: string;
   description: string;
-}
-
-export interface Objective {
-  id: string;
-  characterId: CharacterId;
-  title: string;
-  description: string;
-  status: ObjectiveStatus;
 }
 
 export interface InventoryItem {
@@ -125,7 +115,7 @@ export const characters: Character[] = [
       "Mariée du jour, maman de Jonas. Pâte à crêpes, c'est la peluche fétiche de ton fils — et elle vient de disparaître en pleine réception. Tu es organisée, intuitive, et tu n'aimes pas qu'on touche aux affaires de ton fils.",
     alibi: "—",
     directive:
-      "Mène l'enquête avec Lucas. Va à la pêche aux anecdotes personnelles : chaque souvenir bien placé débloque un indice.",
+      "Mène l'enquête avec Lucas. Va à la pêche aux anecdotes personnelles : chaque souvenir bien placé débloque un indice.\n\nObjectifs :\n• Retrouver Pâte à crêpes avant le gâteau — C'est ta mission principale.\n• Faire parler chaque invité avec son anecdote — Chaque souvenir personnel bien posé débloque un indice.\n• Désigner le ou les coupables avant le dessert — Avec ou sans certitude.",
     anecdoteHint: "—",
     keyPhrase: "—",
     mainClue: "Tu reçois les indices au fur et à mesure des révélations.",
@@ -147,7 +137,7 @@ export const characters: Character[] = [
       "Marié du jour, papa de Jonas. Cartésien, méthodique, légèrement dépassé par les émotions de la journée. Tu veux retrouver Pâte à crêpes avant le gâteau coûte que coûte.",
     alibi: "—",
     directive:
-      "Soutiens Agathe et garde ton sang-froid. Sollicite chaque invité avec une anecdote personnelle pour faire tomber leur indice.",
+      "Soutiens Agathe et garde ton sang-froid. Sollicite chaque invité avec une anecdote personnelle pour faire tomber leur indice.\n\nObjectifs :\n• Soutenir Agathe dans l'enquête — Et garder ton sang-froid.\n• Ne pas pleurer pendant ton discours — Bonne chance.",
     anecdoteHint: "—",
     keyPhrase: "—",
     mainClue: "Tu reçois les indices au fur et à mesure des révélations.",
@@ -172,7 +162,7 @@ export const characters: Character[] = [
       "Tu as fait le coup (enfin, presque) ! Tu as laissé le Croque-Souci « dévorer » Pâte à crêpes par accident, et tu l'as caché. Ton mobile : tu voulais que ta nouvelle peluche soit la préférée de Jonas — Pâte à crêpes était moche et puante.",
     alibi: "« J'étais en train de vérifier que le buffet des desserts était bien installé. »",
     directive:
-      "Sois fuyant. Si Agathe ou Lucas t'interrogent, bégaie un peu et cherche le regard d'Eugénie. Relais : suggère innocemment aux mariés d'aller cuisiner Victorine sur son anecdote.",
+      "Sois fuyant. Si Agathe ou Lucas t'interrogent, bégaie un peu et cherche le regard d'Eugénie. Relais : suggère innocemment aux mariés d'aller cuisiner Victorine sur son anecdote.\n\nObjectifs :\n• Ne JAMAIS avouer ce qui s'est passé — Sauf si tu craques sous la pression de ton anecdote.\n• Garder le ticket de caisse hors de vue — Idéalement, le déchirer si possible.",
     relayTargetId: "victorine",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -198,7 +188,7 @@ export const characters: Character[] = [
     alibi:
       "« J'étais aux toilettes pour refaire mon rouge à lèvres, puis j'ai discuté avec Arthur. »",
     directive:
-      "Défends Arthur bec et ongles. Relais : oriente discrètement les mariés vers Arthur en leur disant qu'il a l'air bizarre et qu'ils devraient le faire parler sur son anecdote.",
+      "Défends Arthur bec et ongles. Relais : oriente discrètement les mariés vers Arthur en leur disant qu'il a l'air bizarre et qu'ils devraient le faire parler sur son anecdote.\n\nObjectifs :\n• Surveiller le grand sac en permanence — Il contient le Croque-Souci.\n• Protéger Arthur s'il commence à craquer — Il craque toujours.",
     relayTargetId: "arthur",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -223,7 +213,7 @@ export const characters: Character[] = [
     alibi:
       "« J'étais dans la cuisine, à inspecter l'hygiène du plan de travail et à chercher des Tupperwares pour les restes. »",
     directive:
-      "Dis que la disparition de la peluche est une excellente nouvelle. Relais : pour noyer le poisson, conseille aux mariés d'aller fouiner du côté d'Eugénie en évoquant son anecdote.",
+      "Dis que la disparition de la peluche est une excellente nouvelle. Relais : pour noyer le poisson, conseille aux mariés d'aller fouiner du côté d'Eugénie en évoquant son anecdote.\n\nObjectifs :\n• Dire que la disparition est une bonne nouvelle — Sois assumé. Tu détestes cette peluche.",
     relayTargetId: "eugenie",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -249,7 +239,7 @@ export const characters: Character[] = [
     alibi:
       "« J'étais au bar en train de siffler le punch. J'en suis à mon 4ème verre, je suis en pleine forme ! »",
     directive:
-      "Aie l'air coupable pour des choses inutiles, fais des blagues lourdes. Relais : accuse ouvertement Léopold et dis aux mariés de le confronter sur son anecdote.",
+      "Aie l'air coupable pour des choses inutiles, fais des blagues lourdes. Relais : accuse ouvertement Léopold et dis aux mariés de le confronter sur son anecdote.\n\nObjectifs :\n• Faire au moins une blague lourde par quart d'heure — Et boire un punch entre chaque.",
     relayTargetId: "leopold",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -273,7 +263,7 @@ export const characters: Character[] = [
       "La photographe amatrice qui a des preuves dans son téléphone. Tu adores les belles photos esthétiques du mariage, mais Jonas s'incruste partout avec Pâte à crêpes, qui est, soyons honnêtes, très moche. Tu aurais pu la cacher juste le temps de faire de jolies photos de famille.",
     alibi: "« J'étais dans le jardin en train de faire des photos et des vidéos des invités. »",
     directive:
-      "Utilise ton téléphone pour photographier les invités. Relais : dis aux mariés que Claire est très connectée aux énergies ce soir et qu'ils devraient lui parler de son anecdote.",
+      "Utilise ton téléphone pour photographier les invités. Relais : dis aux mariés que Claire est très connectée aux énergies ce soir et qu'ils devraient lui parler de son anecdote.\n\nObjectifs :\n• Prendre 5 photos esthétiques de la soirée — Sans Pâte à crêpes au premier plan, idéalement.",
     relayTargetId: "claire",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -298,7 +288,7 @@ export const characters: Character[] = [
     alibi:
       "« J'étais dans la salle de repos en train d'essayer de déplier ce satané lit parapluie pour Roby. »",
     directive:
-      "Laisse planer le doute sur ton cadeau mystère. Relais : pour te dédouaner, suggère aux mariés d'aller sonder ta femme Lénaïc sur son anecdote.",
+      "Laisse planer le doute sur ton cadeau mystère. Relais : pour te dédouaner, suggère aux mariés d'aller sonder ta femme Lénaïc sur son anecdote.\n\nObjectifs :\n• Laisser planer le mystère sur ton cadeau pour Roby — Le plus longtemps possible.",
     relayTargetId: "lenaic",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -322,7 +312,7 @@ export const characters: Character[] = [
       "Celle qui préfère les jeux éducatifs. Tu trouves que les peluches n'ont aucun intérêt pour le développement d'un enfant. Tu aurais pu faire disparaître Pâte à crêpes pour forcer Jonas à utiliser son cerveau avec des jeux de construction, de logique ou d'éveil bien plus intéressants.",
     alibi: "« J'étais en train d'écrire un beau mot pour Agathe et Lucas dans le livre d'or. »",
     directive:
-      "Place tes remarques sur les jeux éducatifs. Relais : conseille aux mariés d'aller vérifier l'alibi d'Antoine en évoquant son anecdote.",
+      "Place tes remarques sur les jeux éducatifs. Relais : conseille aux mariés d'aller vérifier l'alibi d'Antoine en évoquant son anecdote.\n\nObjectifs :\n• Placer 2 remarques sur les jeux éducatifs — Devant les mariés idéalement.",
     relayTargetId: "antoine",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -346,7 +336,7 @@ export const characters: Character[] = [
       "Le frère farceur qui adore Jonas, mais qui veut absolument faire tomber son rival Gauthier. Kidnapper la peluche, c'est exactement le genre de stupidité que tu ferais pour rigoler. Ta vraie motivation ce soir, c'est ta compétition de « meilleur tonton » avec Gauthier.",
     alibi: "« J'étais en train de cacher du papier toilette dans la voiture des mariés. »",
     directive:
-      "Glisse la fausse lettre de rançon. Accuse Gauthier sans relâche. Relais : pousse les mariés à aller voir Julie pour ses photos en mentionnant son anecdote.",
+      "Glisse la fausse lettre de rançon. Accuse Gauthier sans relâche. Relais : pousse les mariés à aller voir Julie pour ses photos en mentionnant son anecdote.\n\nObjectifs :\n• Glisser la fausse lettre de rançon — Pendant l'entrée, discrètement.\n• Accuser Gauthier au moins 3 fois — Sans relâche.",
     relayTargetId: "julie",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -371,7 +361,7 @@ export const characters: Character[] = [
     alibi:
       "« J'étais en train de m'extasier sur la pièce montée avec le traiteur, tout est tellement merveilleux ! »",
     directive:
-      "Dédramatise la situation à fond. Relais : pour protéger Arthur, oriente innocemment les mariés vers Papy Hervé en évoquant son anecdote.",
+      "Dédramatise la situation à fond. Relais : pour protéger Arthur, oriente innocemment les mariés vers Papy Hervé en évoquant son anecdote.\n\nObjectifs :\n• Dédramatiser la situation à chaque accusation — Tu détestes les conflits.",
     relayTargetId: "herve",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -396,7 +386,7 @@ export const characters: Character[] = [
     alibi:
       "« Je faisais une petite sieste spirituelle dans un fauteuil au fond de la salle pour me connecter aux énergies du lieu. »",
     directive:
-      "Baille souvent. Dis qu'il faut laisser la peluche faire sa vie. Relais : dis que les astres recommandent d'aller interroger Mamie Christelle au sujet de son anecdote.",
+      "Baille souvent. Dis qu'il faut laisser la peluche faire sa vie. Relais : dis que les astres recommandent d'aller interroger Mamie Christelle au sujet de son anecdote.\n\nObjectifs :\n• Parler de ton « aura mauve » au moins une fois en public — Que tout le monde t'entende.",
     relayTargetId: "christelle",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -420,7 +410,7 @@ export const characters: Character[] = [
       "La sœur loyale en public… mais le mystérieux « Corbeau » en secret. Tu n'as pas touché à Pâte à crêpes. En revanche, tu es furieuse que tout le monde (et surtout Léopold) accuse ton mari Gauthier. Tu as aperçu Arthur et Eugénie paniquer autour d'un grand sac et tu as compris qu'ils étaient les vrais coupables.",
     alibi: "« J'étais en train de retoucher mon maquillage dans un coin un peu sombre. »",
     directive:
-      "En secret : sois le Corbeau (fais passer des petits mots discrets). En public : défends Gauthier. Relais : pousse les mariés à acculer Gauthier en lui rappelant son anecdote.",
+      "En secret : sois le Corbeau (fais passer des petits mots discrets). En public : défends Gauthier. Relais : pousse les mariés à acculer Gauthier en lui rappelant son anecdote.\n\nObjectifs :\n• Faire passer 3 mots du Corbeau aux mariés — Sans te faire prendre.\n• Défendre publiquement Gauthier — Il en a besoin face à Léopold.",
     relayTargetId: "gauthier",
     anecdoteHint: PLACEHOLDER,
     keyPhrase: PLACEHOLDER_PHRASE,
@@ -535,35 +525,6 @@ export const secrets: Secret[] = [
     description:
       "Tu as aperçu Arthur et Eugénie paniquer autour d'un grand sac. Tu sais que ce sont eux les coupables.",
   },
-];
-
-// ============== OBJECTIFS ==============
-export const objectives: Objective[] = [
-  // Mariés
-  { id: "o-agathe-1", characterId: "agathe", title: "Retrouver Pâte à crêpes avant le gâteau", description: "C'est ta mission principale.", status: "pending" },
-  { id: "o-agathe-2", characterId: "agathe", title: "Faire parler chaque invité avec son anecdote", description: "Chaque souvenir personnel bien posé débloque un indice.", status: "pending" },
-  { id: "o-agathe-3", characterId: "agathe", title: "Désigner le ou les coupables avant le dessert", description: "Avec ou sans certitude.", status: "pending" },
-  { id: "o-lucas-1", characterId: "lucas", title: "Soutenir Agathe dans l'enquête", description: "Et garder ton sang-froid.", status: "pending" },
-  { id: "o-lucas-2", characterId: "lucas", title: "Ne pas pleurer pendant ton discours", description: "Bonne chance.", status: "pending" },
-
-  // Coupables
-  { id: "o-arthur-1", characterId: "arthur", title: "Ne JAMAIS avouer ce qui s'est passé", description: "Sauf si tu craques sous la pression de ton anecdote.", status: "pending" },
-  { id: "o-arthur-2", characterId: "arthur", title: "Garder le ticket de caisse hors de vue", description: "Idéalement, le déchirer si possible.", status: "pending" },
-  { id: "o-eugenie-1", characterId: "eugenie", title: "Surveiller le grand sac en permanence", description: "Il contient le Croque-Souci.", status: "pending" },
-  { id: "o-eugenie-2", characterId: "eugenie", title: "Protéger Arthur s'il commence à craquer", description: "Il craque toujours.", status: "pending" },
-
-  // Témoins
-  { id: "o-herve-1", characterId: "herve", title: "Dire que la disparition est une bonne nouvelle", description: "Sois assumé. Tu détestes cette peluche.", status: "pending" },
-  { id: "o-gauthier-1", characterId: "gauthier", title: "Faire au moins une blague lourde par quart d'heure", description: "Et boire un punch entre chaque.", status: "pending" },
-  { id: "o-julie-1", characterId: "julie", title: "Prendre 5 photos esthétiques de la soirée", description: "Sans Pâte à crêpes au premier plan, idéalement.", status: "pending" },
-  { id: "o-antoine-1", characterId: "antoine", title: "Laisser planer le mystère sur ton cadeau pour Roby", description: "Le plus longtemps possible.", status: "pending" },
-  { id: "o-lenaic-1", characterId: "lenaic", title: "Placer 2 remarques sur les jeux éducatifs", description: "Devant les mariés idéalement.", status: "pending" },
-  { id: "o-leopold-1", characterId: "leopold", title: "Glisser la fausse lettre de rançon", description: "Pendant l'entrée, discrètement.", status: "pending" },
-  { id: "o-leopold-2", characterId: "leopold", title: "Accuser Gauthier au moins 3 fois", description: "Sans relâche.", status: "pending" },
-  { id: "o-christelle-1", characterId: "christelle", title: "Dédramatiser la situation à chaque accusation", description: "Tu détestes les conflits.", status: "pending" },
-  { id: "o-claire-1", characterId: "claire", title: "Parler de ton « aura mauve » au moins une fois en public", description: "Que tout le monde t'entende.", status: "pending" },
-  { id: "o-victorine-1", characterId: "victorine", title: "Faire passer 3 mots du Corbeau aux mariés", description: "Sans te faire prendre.", status: "pending" },
-  { id: "o-victorine-2", characterId: "victorine", title: "Défendre publiquement Gauthier", description: "Il en a besoin face à Léopold.", status: "pending" },
 ];
 
 // ============== INVENTAIRE ==============
@@ -810,9 +771,6 @@ export function findCharacterByCode(code: string): Character | undefined {
 
 export function getSecretsFor(id: CharacterId) {
   return secrets.filter((s) => s.characterId === id);
-}
-export function getObjectivesFor(id: CharacterId) {
-  return objectives.filter((o) => o.characterId === id);
 }
 export function getInventoryFor(id: CharacterId) {
   return inventory.filter((i) => i.characterId === id);

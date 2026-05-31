@@ -177,7 +177,7 @@ function FichePage() {
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Consigne pour la soirée
                 </p>
-                <p className="mt-1 text-sm text-foreground/90 leading-relaxed">
+                <p className="mt-1 text-sm text-foreground/90 leading-relaxed whitespace-pre-line">
                   {character.directive}
                 </p>
               </div>
