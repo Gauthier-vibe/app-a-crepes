@@ -72,7 +72,7 @@ function FichePage() {
   const secrets = getSecretsFor(character.id);
   const items = getInventoryFor(character.id);
   const clueRevealed = isRevealed(character.id);
-  const hasKeyClue = !character.isInvestigator && character.anecdoteHint !== "—";
+  const hasKeyClue = !character.isInvestigator;
   const holder = stored?.holder_character_id
     ? charactersById[stored.holder_character_id as keyof typeof charactersById]
     : null;
