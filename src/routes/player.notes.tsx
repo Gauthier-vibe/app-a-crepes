@@ -82,14 +82,14 @@ function NotesPage() {
                   <div className="flex items-start gap-3">
                     <img
                       src={c.image}
-                      alt={c.fullName}
+                      alt={c.name}
                       width={96}
                       height={96}
                       className="h-12 w-12 rounded-full object-cover ring-2 ring-accent shrink-0"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="font-serif text-lg leading-tight">{c.fullName}</p>
+                        <p className="font-serif text-lg leading-tight">{c.name}</p>
                         <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-accent text-accent-foreground">
                           <KeyRound className="h-3 w-3" />
                         </span>

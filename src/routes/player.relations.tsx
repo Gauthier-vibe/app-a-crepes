@@ -67,7 +67,7 @@ function RelationsPage() {
                   <div className="relative shrink-0">
                     <img
                       src={c.image}
-                      alt={c.fullName}
+                      alt={c.name}
                       loading="lazy"
                       width={128}
                       height={128}
