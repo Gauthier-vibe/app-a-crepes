@@ -21,6 +21,7 @@ export const Route = createFileRoute("/gm")({
 function GmLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { character, setCharacter } = useCurrentCharacter();
   const [authorized, setAuthorized] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -32,6 +33,11 @@ function GmLayout() {
       navigate({ to: "/login" });
     }
   }, [navigate]);
+
+  const handleLoginAs = (id: CharacterId) => {
+    setCharacter(id);
+    navigate({ to: "/player" });
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("mp:is-gm");
