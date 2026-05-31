@@ -76,19 +76,12 @@ function GmPlayerDetail() {
           )}
         </Panel>
 
-        <Panel icon={Target} title={`Objectifs (${objectives.length})`}>
-          <ul className="space-y-2">
-            {objectives.map((o) => (
-              <li key={o.id} className="flex items-start gap-2 text-sm">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                <span>
-                  <span className="font-medium">{o.title}</span>
-                  <span className="text-muted-foreground"> — {o.description}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
+        <Panel icon={Drama} title="Consigne pour la soirée">
+          <p className="text-sm whitespace-pre-line text-foreground/90 leading-relaxed">
+            {character.directive}
+          </p>
         </Panel>
+
 
         <Panel icon={Backpack} title={`Inventaire (${inv.length})`}>
           <ul className="space-y-2 text-sm">
