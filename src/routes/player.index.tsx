@@ -327,30 +327,6 @@ function FichePage() {
           )}
         </AccordionShell>
 
-        <AccordionShell
-          value="objectives"
-          icon={Target}
-          label="Mes objectifs"
-          count={objectives.length}
-        >
-          <ul className="space-y-2.5">
-            {objectives.map((o) => (
-              <li
-                key={o.id}
-                className="rounded-md border border-border bg-background/60 p-3"
-              >
-                <div className="flex items-start gap-2.5">
-                  <ObjectiveStatusBadge status={o.status} />
-                  <div className="min-w-0">
-                    <p className="font-medium text-sm">{o.title}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{o.description}</p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </AccordionShell>
-
         <AccordionShell value="inventory" icon={Backpack} label="Mon inventaire" count={items.length}>
           {items.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Les poches vides.</p>
