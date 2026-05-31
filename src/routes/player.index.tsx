@@ -210,7 +210,7 @@ function FichePage() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Ton indice clé
+                Ton indice secret
               </p>
               <h2 className="font-serif text-xl leading-tight mt-0.5">
                 Ton anecdote personnelle
