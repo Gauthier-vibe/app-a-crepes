@@ -98,6 +98,39 @@ export type Database = {
         }
         Relationships: []
       }
+      killer_missions: {
+        Row: {
+          alive: boolean
+          character_id: string
+          killed_at: string | null
+          killed_by: string | null
+          kills_count: number
+          mission: string
+          target_character_id: string
+          updated_at: string
+        }
+        Insert: {
+          alive?: boolean
+          character_id: string
+          killed_at?: string | null
+          killed_by?: string | null
+          kills_count?: number
+          mission: string
+          target_character_id: string
+          updated_at?: string
+        }
+        Update: {
+          alive?: boolean
+          character_id?: string
+          killed_at?: string | null
+          killed_by?: string | null
+          kills_count?: number
+          mission?: string
+          target_character_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       revealed_clues: {
         Row: {
           clue_text: string

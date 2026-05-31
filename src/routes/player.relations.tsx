@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { characters, getRelationBetween } from "@/data/mock";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { KillerGameCard } from "@/components/player/KillerGameCard";
 
 export const Route = createFileRoute("/player/relations")({
   head: () => ({ meta: [{ title: "Relations — Murder Party" }] }),
@@ -38,6 +39,8 @@ function RelationsPage() {
           Touchez un nom pour en savoir plus. Les indices à transmettre apparaissent en surbrillance.
         </p>
       </header>
+
+      <KillerGameCard characterId={character.id} />
 
       <ul className="flex flex-col gap-2.5">
         {others.map((c) => {
