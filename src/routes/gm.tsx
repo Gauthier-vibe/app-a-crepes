@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Crown, LayoutDashboard, MessageCircle, ListChecks, LogOut } from "lucide-react";
+import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +35,7 @@ function GmLayout() {
     { to: "/gm", label: "Vue d'ensemble", icon: LayoutDashboard, match: pathname === "/gm" },
     { to: "/gm/timeline", label: "Scénario", icon: ListChecks, match: pathname.startsWith("/gm/timeline") },
     { to: "/gm/chat", label: "Chat & indices", icon: MessageCircle, match: pathname.startsWith("/gm/chat") },
+    { to: "/gm/help", label: "Boîte d'aide", icon: LifeBuoy, match: pathname.startsWith("/gm/help") },
   ] as const;
 
   return (

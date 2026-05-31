@@ -1,25 +1,24 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Users, MessageCircle, NotebookPen } from "lucide-react";
+import { BookOpen, Users, MessageCircle, VenetianMask, LifeBuoy } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
-  to: "/player" | "/player/relations" | "/player/chat" | "/player/notes";
+  to: "/player" | "/player/relations" | "/player/chat" | "/player/role" | "/player/help";
   label: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   match: (path: string) => boolean;
 };
 
-export function BottomNav({ showNotes }: { showNotes: boolean }) {
+export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const items: NavItem[] = [
     { to: "/player", label: "Fiche", icon: BookOpen, match: (p) => p === "/player" || p === "/player/" },
     { to: "/player/relations", label: "Relations", icon: Users, match: (p) => p.startsWith("/player/relations") },
     { to: "/player/chat", label: "Chat", icon: MessageCircle, match: (p) => p.startsWith("/player/chat") },
-    ...(showNotes
-      ? [{ to: "/player/notes" as const, label: "Notes", icon: NotebookPen, match: (p: string) => p.startsWith("/player/notes") }]
-      : []),
+    { to: "/player/role", label: "Rôle", icon: VenetianMask, match: (p) => p.startsWith("/player/role") },
+    { to: "/player/help", label: "Help", icon: LifeBuoy, match: (p) => p.startsWith("/player/help") },
   ];
 
   return (

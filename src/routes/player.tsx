@@ -65,7 +65,7 @@ function PlayerLayout() {
         <Outlet />
       </main>
 
-      <BottomNav showNotes={character.isInvestigator} />
+      <BottomNav />
     </div>
   );
 }
