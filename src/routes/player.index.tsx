@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import {
   BookText,
   Lock,
-  Target,
   Backpack,
   Sparkles,
   ChevronRight,
-  Check,
-  X,
-  Clock,
   KeyRound,
   Eye,
   EyeOff,
@@ -43,7 +39,6 @@ import { useCharacterClues } from "@/hooks/useCharacterClues";
 import {
   charactersById,
   getInventoryFor,
-  getObjectivesFor,
   getSecretsFor,
   type Secret,
 } from "@/data/mock";
@@ -75,7 +70,6 @@ function FichePage() {
 
   if (!character) return null;
   const secrets = getSecretsFor(character.id);
-  const objectives = getObjectivesFor(character.id);
   const items = getInventoryFor(character.id);
   const clueRevealed = isRevealed(character.id);
   const hasKeyClue = !character.isInvestigator && character.anecdoteHint !== "—";
@@ -333,30 +327,6 @@ function FichePage() {
           )}
         </AccordionShell>
 
-        <AccordionShell
-          value="objectives"
-          icon={Target}
-          label="Mes objectifs"
-          count={objectives.length}
-        >
-          <ul className="space-y-2.5">
-            {objectives.map((o) => (
-              <li
-                key={o.id}
-                className="rounded-md border border-border bg-background/60 p-3"
-              >
-                <div className="flex items-start gap-2.5">
-                  <ObjectiveStatusBadge status={o.status} />
-                  <div className="min-w-0">
-                    <p className="font-medium text-sm">{o.title}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{o.description}</p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </AccordionShell>
-
         <AccordionShell value="inventory" icon={Backpack} label="Mon inventaire" count={items.length}>
           {items.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Les poches vides.</p>
@@ -445,25 +415,5 @@ function AccordionShell({
       </AccordionTrigger>
       <AccordionContent className="pt-1 pb-4">{children}</AccordionContent>
     </AccordionItem>
-  );
-}
-
-function ObjectiveStatusBadge({ status }: { status: "pending" | "done" | "failed" }) {
-  if (status === "done")
-    return (
-      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground shrink-0">
-        <Check className="h-3 w-3" />
-      </span>
-    );
-  if (status === "failed")
-    return (
-      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground shrink-0">
-        <X className="h-3 w-3" />
-      </span>
-    );
-  return (
-    <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted text-muted-foreground shrink-0">
-      <Clock className="h-3 w-3" />
-    </span>
   );
 }
