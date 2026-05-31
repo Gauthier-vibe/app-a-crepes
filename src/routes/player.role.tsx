@@ -55,8 +55,6 @@ function RolePage() {
 
       {character.isInvestigator ? (
         <InvestigatorPanel character={character} />
-      ) : character.isGameMaster ? (
-        <GameMasterPanel />
       ) : character.id === "victorine" ? (
         <CorbeauPanel />
       ) : (
