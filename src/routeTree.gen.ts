@@ -14,6 +14,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayerIndexRouteImport } from './routes/player.index'
 import { Route as PlayerRelationsRouteImport } from './routes/player.relations'
+import { Route as PlayerNotesRouteImport } from './routes/player.notes'
+import { Route as PlayerChatRouteImport } from './routes/player.chat'
+import { Route as PlayerRelationsIdRouteImport } from './routes/player.relations.$id'
 
 const PlayerRoute = PlayerRouteImport.update({
   id: '/player',
@@ -40,34 +43,82 @@ const PlayerRelationsRoute = PlayerRelationsRouteImport.update({
   path: '/relations',
   getParentRoute: () => PlayerRoute,
 } as any)
+const PlayerNotesRoute = PlayerNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const PlayerChatRoute = PlayerChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const PlayerRelationsIdRoute = PlayerRelationsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PlayerRelationsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/player': typeof PlayerRouteWithChildren
-  '/player/relations': typeof PlayerRelationsRoute
+  '/player/chat': typeof PlayerChatRoute
+  '/player/notes': typeof PlayerNotesRoute
+  '/player/relations': typeof PlayerRelationsRouteWithChildren
   '/player/': typeof PlayerIndexRoute
+  '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/player/relations': typeof PlayerRelationsRoute
+  '/player/chat': typeof PlayerChatRoute
+  '/player/notes': typeof PlayerNotesRoute
+  '/player/relations': typeof PlayerRelationsRouteWithChildren
   '/player': typeof PlayerIndexRoute
+  '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/player': typeof PlayerRouteWithChildren
-  '/player/relations': typeof PlayerRelationsRoute
+  '/player/chat': typeof PlayerChatRoute
+  '/player/notes': typeof PlayerNotesRoute
+  '/player/relations': typeof PlayerRelationsRouteWithChildren
   '/player/': typeof PlayerIndexRoute
+  '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/player' | '/player/relations' | '/player/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/player'
+    | '/player/chat'
+    | '/player/notes'
+    | '/player/relations'
+    | '/player/'
+    | '/player/relations/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/player/relations' | '/player'
-  id: '__root__' | '/' | '/login' | '/player' | '/player/relations' | '/player/'
+  to:
+    | '/'
+    | '/login'
+    | '/player/chat'
+    | '/player/notes'
+    | '/player/relations'
+    | '/player'
+    | '/player/relations/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/player'
+    | '/player/chat'
+    | '/player/notes'
+    | '/player/relations'
+    | '/player/'
+    | '/player/relations/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -113,16 +164,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerRelationsRouteImport
       parentRoute: typeof PlayerRoute
     }
+    '/player/notes': {
+      id: '/player/notes'
+      path: '/notes'
+      fullPath: '/player/notes'
+      preLoaderRoute: typeof PlayerNotesRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/player/chat': {
+      id: '/player/chat'
+      path: '/chat'
+      fullPath: '/player/chat'
+      preLoaderRoute: typeof PlayerChatRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/player/relations/$id': {
+      id: '/player/relations/$id'
+      path: '/$id'
+      fullPath: '/player/relations/$id'
+      preLoaderRoute: typeof PlayerRelationsIdRouteImport
+      parentRoute: typeof PlayerRelationsRoute
+    }
   }
 }
 
+interface PlayerRelationsRouteChildren {
+  PlayerRelationsIdRoute: typeof PlayerRelationsIdRoute
+}
+
+const PlayerRelationsRouteChildren: PlayerRelationsRouteChildren = {
+  PlayerRelationsIdRoute: PlayerRelationsIdRoute,
+}
+
+const PlayerRelationsRouteWithChildren = PlayerRelationsRoute._addFileChildren(
+  PlayerRelationsRouteChildren,
+)
+
 interface PlayerRouteChildren {
-  PlayerRelationsRoute: typeof PlayerRelationsRoute
+  PlayerChatRoute: typeof PlayerChatRoute
+  PlayerNotesRoute: typeof PlayerNotesRoute
+  PlayerRelationsRoute: typeof PlayerRelationsRouteWithChildren
   PlayerIndexRoute: typeof PlayerIndexRoute
 }
 
 const PlayerRouteChildren: PlayerRouteChildren = {
-  PlayerRelationsRoute: PlayerRelationsRoute,
+  PlayerChatRoute: PlayerChatRoute,
+  PlayerNotesRoute: PlayerNotesRoute,
+  PlayerRelationsRoute: PlayerRelationsRouteWithChildren,
   PlayerIndexRoute: PlayerIndexRoute,
 }
 
@@ -137,13 +225,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

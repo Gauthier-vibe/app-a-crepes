@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Send, Image as ImageIcon, Video, Feather } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { charactersById, messages as seedMessages, type ChatMessage, type CharacterId } from "@/data/mock";
 import { cn } from "@/lib/utils";
@@ -54,13 +53,13 @@ function ChatPage() {
         <h1 className="font-serif text-xl leading-none mt-0.5">Le chat des convives</h1>
       </header>
 
-      <ScrollArea className="flex-1" viewportRef={scrollRef as React.RefObject<HTMLDivElement>}>
+      <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <div className="px-3 py-4 space-y-3">
           {messages.map((m) => (
             <Bubble key={m.id} message={m} currentId={character.id} />
           ))}
         </div>
-      </ScrollArea>
+      </div>
 
       <form
         onSubmit={send}
