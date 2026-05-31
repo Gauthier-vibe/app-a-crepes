@@ -142,9 +142,9 @@ function GmDashboard() {
                 <Button
                   size="sm"
                   className="flex-1"
-                  onClick={() => sendClue(c.id, c.name)}
+                  onClick={() => loginAs(c.id, c.name)}
                 >
-                  <ShieldAlert className="h-3.5 w-3.5 mr-1.5" /> Indice
+                  <UserCog className="h-3.5 w-3.5 mr-1.5" /> Login as
                 </Button>
               </div>
             </li>
