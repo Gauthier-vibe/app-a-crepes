@@ -227,21 +227,26 @@ function FichePage() {
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Ta phrase clé (à personnaliser)
                 </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Si un·e enquêteur·rice prononce cette phrase, tu livres ton indice ci-dessous.
+                </p>
                 <Input
                   value={phrase}
                   onChange={(e) => setPhrase(e.target.value)}
                   placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
                   className="text-sm italic"
                 />
-                <p className="text-[11px] text-muted-foreground">
-                  Si un·e enquêteur·rice prononce cette phrase, tu livres ton indice ci-dessous.
-                </p>
               </div>
 
               <div className="mt-3 rounded-md border border-primary/40 bg-primary/5 p-3 space-y-2">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                   <MessageSquareQuote className="h-3 w-3" />
                   Indice phrase-clé (transmis par un autre)
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  {holder
+                    ? `Cet indice sera transmis aux enquêteurs par ${holder.name}.`
+                    : "Un autre invité transmettra cet indice aux enquêteurs."}
                 </p>
                 <Textarea
                   value={clue}
@@ -250,11 +255,6 @@ function FichePage() {
                   rows={3}
                   className="text-sm"
                 />
-                <p className="text-[11px] text-muted-foreground">
-                  {holder
-                    ? `Cet indice sera transmis aux enquêteurs par ${holder.name}.`
-                    : "Un autre invité transmettra cet indice aux enquêteurs."}
-                </p>
               </div>
 
               <div className="mt-3">
