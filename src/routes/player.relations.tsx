@@ -54,6 +54,14 @@ function RelationsPage() {
                       Enquêteur
                     </span>
                   )}
+                  {showClueMarker && isRevealed(c.id) && (
+                    <span
+                      className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-paper ring-2 ring-background"
+                      title="Indice clé livré"
+                    >
+                      <KeyRound className="h-3.5 w-3.5" />
+                    </span>
+                  )}
                 </div>
                 <div className="px-3 pb-3 -mt-7 relative">
                   <p className="font-serif text-lg leading-tight">{c.name}</p>
