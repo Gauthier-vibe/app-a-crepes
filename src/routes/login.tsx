@@ -110,7 +110,7 @@ function LoginPage() {
           <div className="mt-5 pt-5 border-t border-border/60 text-center">
             <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5" />
-              Game Master : utilisez votre code dédié pour accéder au dashboard
+              Organisateur : utilisez votre code dédié pour accéder au dashboard
             </p>
           </div>
         </form>
@@ -142,7 +142,7 @@ function LoginPage() {
             ))}
           </div>
           <p className="mt-3 text-center text-[10px] text-muted-foreground/80 italic">
-            Le code Game Master est transmis en privé à l'organisateur.
+            Le code organisateur est transmis en privé à l'animateur.
           </p>
         </details>
 

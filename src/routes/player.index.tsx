@@ -259,7 +259,7 @@ function FichePage() {
                 <p className="text-[11px] text-muted-foreground">
                   {holder
                     ? `Cet indice sera transmis aux enquêteurs par ${holder.name}.`
-                    : "Le Game Master désignera le personnage qui transmettra cet indice aux enquêteurs."}
+                    : "Un autre invité transmettra cet indice aux enquêteurs."}
                 </p>
               </div>
 
