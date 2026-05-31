@@ -27,7 +27,6 @@ function GmPlayerDetail() {
   }
 
   const secrets = getSecretsFor(character.id);
-  const objectives = getObjectivesFor(character.id);
   const inv = getInventoryFor(character.id);
   const rel = getRelationsFor(character.id);
 
