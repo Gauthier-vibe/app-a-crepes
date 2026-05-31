@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookText,
   Lock,
@@ -16,6 +16,8 @@ import {
   EyeOff,
   ShieldQuestion,
   Drama,
+  Save,
+  MessageSquareQuote,
 } from "lucide-react";
 
 import {
@@ -26,6 +28,8 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -33,9 +37,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { useRevealedClues } from "@/hooks/useRevealedClues";
+import { useCharacterClues } from "@/hooks/useCharacterClues";
 import {
+  charactersById,
   getInventoryFor,
   getObjectivesFor,
   getSecretsFor,
