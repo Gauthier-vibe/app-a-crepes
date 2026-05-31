@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      character_clues: {
+        Row: {
+          character_id: string
+          delivered: boolean
+          holder_character_id: string | null
+          key_phrase: string | null
+          key_phrase_clue: string | null
+          updated_at: string
+        }
+        Insert: {
+          character_id: string
+          delivered?: boolean
+          holder_character_id?: string | null
+          key_phrase?: string | null
+          key_phrase_clue?: string | null
+          updated_at?: string
+        }
+        Update: {
+          character_id?: string
+          delivered?: boolean
+          holder_character_id?: string | null
+          key_phrase?: string | null
+          key_phrase_clue?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           channel: string
