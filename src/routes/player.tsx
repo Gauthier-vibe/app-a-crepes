@@ -1,5 +1,5 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
+import { Crown, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/player/BottomNav";
