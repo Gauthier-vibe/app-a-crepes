@@ -224,6 +224,9 @@ function FichePage() {
                 <p className="text-[11px] text-muted-foreground">
                   Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
                 </p>
+                <p className="text-xs text-muted-foreground italic">
+                  À livrer uniquement si on évoque ton anecdote clé.
+                </p>
                 <Input
                   value={phrase}
                   onChange={(e) => setPhrase(e.target.value)}
