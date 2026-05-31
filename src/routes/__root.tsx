@@ -81,10 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Le Drame de Pâte à Crêpes — Murder Party" },
       { name: "description", content: "Application compagnon de la Murder Party du mariage d'Agathe & Lucas en Normandie." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Le Drame de Pâte à Crêpes" },
-      { property: "og:description", content: "Murder Party de mariage — application compagnon." },
+      { property: "og:title", content: "Le Drame de Pâte à Crêpes — Murder Party" },
+      { property: "og:description", content: "Application compagnon de la Murder Party du mariage d'Agathe & Lucas en Normandie." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Le Drame de Pâte à Crêpes — Murder Party" },
+      { name: "twitter:description", content: "Application compagnon de la Murder Party du mariage d'Agathe & Lucas en Normandie." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/adaa167b-b037-4d09-b2e8-147bd1ea620e/id-preview-44ab91f5--fa568632-0484-44af-8cde-140a153fec79.lovable.app-1780250857754.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/adaa167b-b037-4d09-b2e8-147bd1ea620e/id-preview-44ab91f5--fa568632-0484-44af-8cde-140a153fec79.lovable.app-1780250857754.png" },
     ],
     links: [
       {
