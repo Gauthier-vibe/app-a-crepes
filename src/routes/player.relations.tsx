@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, KeyRound } from "lucide-react";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
+import { useRevealedClues } from "@/hooks/useRevealedClues";
 import { characters, getRelationBetween } from "@/data/mock";
 
 export const Route = createFileRoute("/player/relations")({
@@ -10,9 +11,11 @@ export const Route = createFileRoute("/player/relations")({
 
 function RelationsPage() {
   const { character } = useCurrentCharacter();
+  const { isRevealed } = useRevealedClues();
   if (!character) return null;
 
   const others = characters.filter((c) => c.id !== character.id);
+  const showClueMarker = character.isInvestigator;
 
   return (
     <div className="px-4 pt-5 pb-6">
