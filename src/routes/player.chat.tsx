@@ -38,8 +38,11 @@ function ChatPage() {
   const [messages, setMessages] = useState<LiveMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   // Initial load + realtime subscription
   useEffect(() => {
