@@ -1,10 +1,9 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { ArrowLeft, Lock, Target, Backpack, Users } from "lucide-react";
+import { ArrowLeft, Lock, Drama, Backpack, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   charactersById,
   getInventoryFor,
-  getObjectivesFor,
   getRelationsFor,
   getSecretsFor,
   type CharacterId,
