@@ -43,6 +43,7 @@ export interface Character {
   image: string;
   isInvestigator: boolean;
   isCulprit?: boolean;
+  isGameMaster?: boolean;
   publicStory: string;
   /** Alibi raconté par le personnage en public */
   alibi: string;
