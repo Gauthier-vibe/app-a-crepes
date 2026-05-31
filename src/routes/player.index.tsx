@@ -224,12 +224,17 @@ function FichePage() {
                 <p className="text-[11px] text-muted-foreground">
                   Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
                 </p>
-                <Input
+                <Textarea
                   value={phrase}
                   onChange={(e) => setPhrase(e.target.value)}
                   placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
+                  rows={3}
                   className="text-sm italic"
                 />
+                <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
+                  <Save className="h-4 w-4 mr-1.5" />
+                  {saving ? "Enregistrement…" : "Enregistrer anecdote"}
+                </Button>
               </div>
 
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
