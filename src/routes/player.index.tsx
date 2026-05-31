@@ -60,7 +60,19 @@ export const Route = createFileRoute("/player/")({
 function FichePage() {
   const { character } = useCurrentCharacter();
   const { isRevealed, reveal, unreveal } = useRevealedClues();
+  const { byId, upsert } = useCharacterClues();
   const [openSecret, setOpenSecret] = useState<Secret | null>(null);
+  const [phrase, setPhrase] = useState("");
+  const [clue, setClue] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const stored = character ? byId(character.id) : null;
+  useEffect(() => {
+    if (stored) {
+      setPhrase(stored.key_phrase ?? "");
+      setClue(stored.key_phrase_clue ?? "");
+    }
+  }, [stored?.character_id, stored?.key_phrase, stored?.key_phrase_clue]);
 
   if (!character) return null;
   const secrets = getSecretsFor(character.id);
@@ -68,6 +80,25 @@ function FichePage() {
   const items = getInventoryFor(character.id);
   const clueRevealed = isRevealed(character.id);
   const hasKeyClue = !character.isInvestigator && character.anecdoteHint !== "—";
+  const holder = stored?.holder_character_id
+    ? charactersById[stored.holder_character_id as keyof typeof charactersById]
+    : null;
+
+  const savePhrase = async () => {
+    if (!character) return;
+    setSaving(true);
+    try {
+      await upsert(character.id, {
+        key_phrase: phrase.trim() || null,
+        key_phrase_clue: clue.trim() || null,
+      });
+      toast.success("Phrase clé et indice enregistrés");
+    } catch {
+      toast.error("Échec de l'enregistrement");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="px-4 pt-5 pb-6 space-y-6">
