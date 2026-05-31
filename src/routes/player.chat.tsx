@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Send, Image as ImageIcon, Video, Feather, Loader2 } from "lucide-react";
+import { Send, Image as ImageIcon, Feather, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
@@ -14,14 +14,17 @@ export const Route = createFileRoute("/player/chat")({
   component: ChatPage,
 });
 
+
 interface LiveMessage {
   id: string;
   channel: string;
   sender_character_id: string;
   sender_display_name: string;
-  content: string;
+  content: string | null;
+  image_url: string | null;
   created_at: string;
 }
+
 
 function formatTime(iso: string) {
   return new Intl.DateTimeFormat("fr-FR", {
@@ -35,8 +38,11 @@ function ChatPage() {
   const [messages, setMessages] = useState<LiveMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   // Initial load + realtime subscription
   useEffect(() => {
@@ -104,6 +110,43 @@ function ChatPage() {
     setSending(false);
   };
 
+  const handleImagePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Format non supporté", { description: "Choisissez une image." });
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Image trop lourde", { description: "Taille maximum : 8 Mo." });
+      return;
+    }
+    setUploading(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${character.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("chat-media")
+      .upload(path, file, { contentType: file.type, upsert: false });
+    if (upErr) {
+      toast.error("Envoi de l'image impossible", { description: upErr.message });
+      setUploading(false);
+      return;
+    }
+    const { data: pub } = supabase.storage.from("chat-media").getPublicUrl(path);
+    const { error } = await supabase.from("chat_messages").insert({
+      channel: "global",
+      sender_character_id: character.id,
+      sender_display_name: character.name,
+      content: null,
+      image_url: pub.publicUrl,
+    });
+    if (error) {
+      toast.error("Message non envoyé", { description: error.message });
+    }
+    setUploading(false);
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
       <header className="px-4 py-3 border-b border-border bg-card/60">
@@ -136,12 +179,24 @@ function ChatPage() {
         onSubmit={send}
         className="flex items-center gap-2 border-t border-border bg-card/80 backdrop-blur px-3 py-2.5"
       >
-        <Button type="button" variant="ghost" size="icon" aria-label="Joindre une image" disabled>
-          <ImageIcon className="h-4 w-4" />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImagePick}
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="Joindre une image"
+          disabled={uploading}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
         </Button>
-        <Button type="button" variant="ghost" size="icon" aria-label="Joindre une vidéo" disabled>
-          <Video className="h-4 w-4" />
-        </Button>
+
         <Input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -210,14 +265,28 @@ function Bubble({ message, currentId }: { message: LiveMessage; currentId: Chara
         )}
         <div
           className={cn(
-            "rounded-2xl px-3.5 py-2 text-[15px] leading-snug shadow-paper",
+            "rounded-2xl text-[15px] leading-snug shadow-paper overflow-hidden",
+            message.image_url ? "p-1" : "px-3.5 py-2",
             isMine
               ? "bg-primary text-primary-foreground rounded-br-sm"
               : "bg-card text-foreground border border-border rounded-bl-sm",
           )}
         >
-          <p>{message.content}</p>
+          {message.image_url && (
+            <a href={message.image_url} target="_blank" rel="noopener noreferrer">
+              <img
+                src={message.image_url}
+                alt="Image partagée"
+                loading="lazy"
+                className="rounded-xl max-h-72 w-auto object-cover"
+              />
+            </a>
+          )}
+          {message.content && (
+            <p className={cn(message.image_url && "px-2.5 py-1.5")}>{message.content}</p>
+          )}
         </div>
+
         <p
           className={cn(
             "text-[10px] text-muted-foreground mt-0.5 font-mono",
