@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, ShieldAlert, MessageSquareQuote } from "lucide-react";
+import { Eye, Sparkles, UserCog, MessageSquareQuote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { characters, type CharacterId } from "@/data/mock";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
+import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/gm/")({
