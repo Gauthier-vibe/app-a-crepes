@@ -243,7 +243,7 @@ function FichePage() {
                 <p className="mt-2 text-xs text-muted-foreground italic">
                   {clueRevealed
                     ? "Indice livré aux enquêteurs."
-                    : "À livrer uniquement si on évoque ton anecdote clé."}
+                    : ""}
                 </p>
               </div>
 
