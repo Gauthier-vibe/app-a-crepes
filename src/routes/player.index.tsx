@@ -49,12 +49,15 @@ export const Route = createFileRoute("/player/")({
 
 function FichePage() {
   const { character } = useCurrentCharacter();
+  const { isRevealed, reveal, unreveal } = useRevealedClues();
   const [openSecret, setOpenSecret] = useState<Secret | null>(null);
 
   if (!character) return null;
   const secrets = getSecretsFor(character.id);
   const objectives = getObjectivesFor(character.id);
   const items = getInventoryFor(character.id);
+  const clueRevealed = isRevealed(character.id);
+  const hasKeyClue = !character.isInvestigator && character.anecdoteHint !== "—";
 
   return (
     <div className="px-4 pt-5 pb-6 space-y-6">
@@ -94,19 +97,100 @@ function FichePage() {
             </div>
           </div>
         </div>
+      </section>
 
-        {!character.isInvestigator && character.anecdoteHint !== "—" && (
-          <div className="mt-5 rounded-lg border border-dashed border-gold/60 bg-gold/5 p-3">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-gold-foreground/80 mb-1">
-              Ton anecdote-clé
+      {/* Rôle caché */}
+      <section className="relative rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-gold/5 p-5 shadow-paper">
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-paper">
+            <Feather className="h-5 w-5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Rôle caché — ne pas révéler
             </p>
-            <p className="text-sm text-foreground">{character.anecdoteHint}</p>
-            <p className="text-xs text-muted-foreground mt-1.5 italic">
-              Si les mariés évoquent ce souvenir avec toi, tu peux leur livrer ton indice principal.
+            <h2 className="font-serif text-2xl leading-tight">{character.hiddenRole.name}</h2>
+            <p className="mt-1.5 text-sm">
+              <span className="font-medium text-primary">Pouvoir :</span>{" "}
+              <span className="text-foreground/90">{character.hiddenRole.power}</span>
+            </p>
+            <p className="mt-1 text-sm text-foreground/80 leading-relaxed">
+              {character.hiddenRole.description}
             </p>
           </div>
-        )}
+        </div>
       </section>
+
+      {/* Indice clé */}
+      {hasKeyClue && (
+        <section
+          className={cn(
+            "relative rounded-2xl border p-5 shadow-paper transition-colors",
+            clueRevealed
+              ? "border-accent/60 bg-accent/10"
+              : "border-dashed border-gold/60 bg-gold/5",
+          )}
+        >
+          <div className="flex items-start gap-3">
+            <span
+              className={cn(
+                "flex h-10 w-10 shrink-0 items-center justify-center rounded-full shadow-paper",
+                clueRevealed
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-gold text-gold-foreground",
+              )}
+            >
+              <KeyRound className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                Ton indice clé
+              </p>
+              <h2 className="font-serif text-xl leading-tight mt-0.5">
+                Ton anecdote personnelle
+              </h2>
+              <p className="mt-2 text-sm text-foreground/90">{character.anecdoteHint}</p>
+
+              <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                  Phrase clé à attendre
+                </p>
+                <p className="text-sm italic text-foreground">{character.keyPhrase}</p>
+              </div>
+
+              <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                  Indice à livrer
+                </p>
+                <p className="text-sm text-foreground">{character.mainClue}</p>
+              </div>
+
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <p className="text-xs text-muted-foreground italic">
+                  {clueRevealed
+                    ? "Indice livré aux enquêteurs."
+                    : "À livrer uniquement si on prononce ta phrase clé."}
+                </p>
+                {clueRevealed ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => unreveal(character.id)}
+                  >
+                    <EyeOff className="h-4 w-4 mr-1.5" />
+                    Annuler
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={() => reveal(character.id)}>
+                    <Eye className="h-4 w-4 mr-1.5" />
+                    J'ai livré mon indice
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Accordéons */}
       <Accordion type="multiple" defaultValue={["story"]} className="space-y-3">
