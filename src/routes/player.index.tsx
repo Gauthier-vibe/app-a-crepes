@@ -70,7 +70,6 @@ function FichePage() {
 
   if (!character) return null;
   const secrets = getSecretsFor(character.id);
-  const objectives = getObjectivesFor(character.id);
   const items = getInventoryFor(character.id);
   const clueRevealed = isRevealed(character.id);
   const hasKeyClue = !character.isInvestigator && character.anecdoteHint !== "—";
