@@ -163,7 +163,7 @@ export const characters: Character[] = [
     directive:
       "Sois fuyant. Si Agathe ou Lucas t'interrogent, bégaie un peu et cherche le regard d'Eugénie. Relais : suggère innocemment aux mariés d'aller cuisiner Victorine sur son anecdote.\n\nObjectifs :\n• Ne JAMAIS avouer ce qui s'est passé — Sauf si tu craques sous la pression de ton anecdote.\n• Garder le ticket de caisse hors de vue — Idéalement, le déchirer si possible.",
     relayTargetId: "victorine",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Bon, d'accord… Je te jure que ce n'est pas moi qui l'ai déchirée intentionnellement ! C'était un accident avec un autre objet… »",
@@ -189,7 +189,7 @@ export const characters: Character[] = [
     directive:
       "Défends Arthur bec et ongles. Relais : oriente discrètement les mariés vers Arthur en leur disant qu'il a l'air bizarre et qu'ils devraient le faire parler sur son anecdote.\n\nObjectifs :\n• Surveiller le grand sac en permanence — Il contient le Croque-Souci.\n• Protéger Arthur s'il commence à craquer — Il craque toujours.",
     relayTargetId: "arthur",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Ok… J'ai bien vu Arthur paniquer avec un objet coincé tout à l'heure, mais à la base on voulait juste faire une belle surprise ! »",
@@ -214,7 +214,7 @@ export const characters: Character[] = [
     directive:
       "Dis que la disparition de la peluche est une excellente nouvelle. Relais : pour noyer le poisson, conseille aux mariés d'aller fouiner du côté d'Eugénie en évoquant son anecdote.\n\nObjectifs :\n• Dire que la disparition est une bonne nouvelle — Sois assumé. Tu détestes cette peluche.",
     relayTargetId: "eugenie",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Je n'ai rien fait à cette peluche sale. Par contre, j'ai vu Arthur transpirer à grosses gouttes tout à l'heure, et pourtant la clim fonctionne bien… »",
@@ -240,7 +240,7 @@ export const characters: Character[] = [
     directive:
       "Aie l'air coupable pour des choses inutiles, fais des blagues lourdes. Relais : accuse ouvertement Léopold et dis aux mariés de le confronter sur son anecdote.\n\nObjectifs :\n• Faire au moins une blague lourde par quart d'heure — Et boire un punch entre chaque.",
     relayTargetId: "leopold",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« J'ai recousu cette horreur le mois dernier, oui, mais aujourd'hui je n'y ai pas touché ! Je suis sûr que c'est une histoire de cadeau qui a mal tourné. »",
@@ -264,7 +264,7 @@ export const characters: Character[] = [
     directive:
       "Utilise ton téléphone pour photographier les invités. Relais : dis aux mariés que Claire est très connectée aux énergies ce soir et qu'ils devraient lui parler de son anecdote.\n\nObjectifs :\n• Prendre 5 photos esthétiques de la soirée — Sans Pâte à crêpes au premier plan, idéalement.",
     relayTargetId: "claire",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« J'ai la preuve en vidéo que [X et Y] étaient avec moi dehors. Et sur ma vidéo, on entend un énorme bruit de fermeture éclair, BZZZT, venant de la salle ! »",
@@ -289,7 +289,7 @@ export const characters: Character[] = [
     directive:
       "Laisse planer le doute sur ton cadeau mystère. Relais : pour te dédouaner, suggère aux mariés d'aller sonder ta femme Lénaïc sur son anecdote.\n\nObjectifs :\n• Laisser planer le mystère sur ton cadeau pour Roby — Le plus longtemps possible.",
     relayTargetId: "lenaic",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Mon cadeau pour Roby c'est un train en bois ! Je n'ai pas touché à Pâte à crêpes. Par contre, j'ai cru entendre quelqu'un dire « Pousse-le, ça va coincer ! » près des cadeaux. »",
@@ -313,7 +313,7 @@ export const characters: Character[] = [
     directive:
       "Place tes remarques sur les jeux éducatifs. Relais : conseille aux mariés d'aller vérifier l'alibi d'Antoine en évoquant son anecdote.\n\nObjectifs :\n• Placer 2 remarques sur les jeux éducatifs — Devant les mariés idéalement.",
     relayTargetId: "antoine",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Je n'ai pas volé cette vieillerie. Mais si ça peut stimuler votre déduction : avez-vous remarqué qu'Eugénie porte un sac beaucoup trop volumineux pour un mariage ? »",
@@ -337,7 +337,7 @@ export const characters: Character[] = [
     directive:
       "Glisse la fausse lettre de rançon. Accuse Gauthier sans relâche. Relais : pousse les mariés à aller voir Julie pour ses photos en mentionnant son anecdote.\n\nObjectifs :\n• Glisser la fausse lettre de rançon — Pendant l'entrée, discrètement.\n• Accuser Gauthier au moins 3 fois — Sans relâche.",
     relayTargetId: "julie",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Ok, la lettre de rançon c'était pour rire ! Je n'ai pas la peluche. Mais j'ai vu que le ticket de caisse du magasin de jouets retrouvé par terre était au nom d'Arthur… »",
@@ -362,7 +362,7 @@ export const characters: Character[] = [
     directive:
       "Dédramatise la situation à fond. Relais : pour protéger Arthur, oriente innocemment les mariés vers Papy Hervé en évoquant son anecdote.\n\nObjectifs :\n• Dédramatiser la situation à chaque accusation — Tu détestes les conflits.",
     relayTargetId: "herve",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Oh les enfants… Je sais qu'Arthur et Eugénie ont l'air coupables ce soir, mais c'est parce qu'ils vous préparaient une belle surprise qui a mal tourné, pardonnez-les. »",
@@ -387,7 +387,7 @@ export const characters: Character[] = [
     directive:
       "Baille souvent. Dis qu'il faut laisser la peluche faire sa vie. Relais : dis que les astres recommandent d'aller interroger Mamie Christelle au sujet de son anecdote.\n\nObjectifs :\n• Parler de ton « aura mauve » au moins une fois en public — Que tout le monde t'entende.",
     relayTargetId: "christelle",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Je ressens les auras… L'aura de Pâte à crêpes est toujours dans cette pièce, mais elle est englobée et mangée par une autre aura plus sombre, munie d'une fermeture éclair. »",
@@ -411,7 +411,7 @@ export const characters: Character[] = [
     directive:
       "En secret : sois le Corbeau (fais passer des petits mots discrets). En public : défends Gauthier. Relais : pousse les mariés à acculer Gauthier en lui rappelant son anecdote.\n\nObjectifs :\n• Faire passer 3 mots du Corbeau aux mariés — Sans te faire prendre.\n• Défendre publiquement Gauthier — Il en a besoin face à Léopold.",
     relayTargetId: "gauthier",
-    anecdoteHint: PLACEHOLDER,
+    anecdoteHint: "—",
     keyPhrase: PLACEHOLDER_PHRASE,
     mainClue:
       "« Puisque tu me prends par les sentiments… Arrête de chercher du côté de Gauthier. Le vrai coupable est le parrain, et je sais qu'il a acheté une peluche géante récemment. »",
