@@ -300,10 +300,7 @@ function FichePage() {
       )}
 
       {/* Accordéons */}
-      <Accordion type="multiple" defaultValue={["story"]} className="space-y-3">
-        <AccordionShell value="story" icon={BookText} label="Histoire publique">
-          <p className="text-sm leading-relaxed text-foreground/90">{character.publicStory}</p>
-        </AccordionShell>
+      <Accordion type="multiple" className="space-y-3">
 
         <AccordionShell
           value="secrets"
