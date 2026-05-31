@@ -217,6 +217,21 @@ function FichePage() {
               </h2>
               <p className="mt-2 text-sm text-foreground/90">{character.anecdoteHint}</p>
 
+              <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Ta phrase clé
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
+                </p>
+                <Input
+                  value={phrase}
+                  onChange={(e) => setPhrase(e.target.value)}
+                  placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
+                  className="text-sm italic"
+                />
+              </div>
+
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
                   INDICE SECRET
@@ -288,25 +303,10 @@ function FichePage() {
         <AccordionShell
           value="key-phrase"
           icon={KeyRound}
-          label="Ma phrase clé & indice transmis"
+          label="Indice à transmettre"
           tone="primary"
         >
           <div className="space-y-3">
-            <div className="rounded-md border border-border bg-background/70 p-3 space-y-2">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Ta phrase clé
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
-              </p>
-              <Input
-                value={phrase}
-                onChange={(e) => setPhrase(e.target.value)}
-                placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
-                className="text-sm italic"
-              />
-            </div>
-
             <div className="rounded-md border border-primary/40 bg-primary/5 p-3 space-y-2">
               <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                 <MessageSquareQuote className="h-3 w-3" />
@@ -328,7 +328,7 @@ function FichePage() {
 
             <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
               <Save className="h-4 w-4 mr-1.5" />
-              {saving ? "Enregistrement…" : "Enregistrer phrase & indice"}
+              {saving ? "Enregistrement…" : "Enregistrer indice"}
             </Button>
           </div>
         </AccordionShell>
