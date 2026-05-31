@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { LifeBuoy, Loader2, Send } from "lucide-react";
+import { Crown, LifeBuoy, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
@@ -110,6 +110,35 @@ function HelpPage() {
           Ce salon est confidentiel : seuls les organisateurs voient tes messages.
         </p>
       </header>
+
+      {character.isGameMaster && (
+        <div className="px-3 py-3">
+          <div className="paper-texture rounded-xl border border-primary/40 shadow-paper p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Crown className="h-5 w-5 text-primary" />
+              <p className="font-serif text-lg">Console d'administration</p>
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">
+              Tu pilotes la soirée en coulisses. Accède à la vue d'ensemble, au scénario, à la
+              modération du chat et aux demandes d'aide des invités.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button asChild size="sm">
+                <Link to="/gm">Vue d'ensemble</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/gm/timeline">Scénario</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/gm/chat">Chat & indices</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/gm/help">Boîte d'aide</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <div className="px-3 py-4 space-y-3">
