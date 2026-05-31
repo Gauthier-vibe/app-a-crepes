@@ -53,6 +53,13 @@ function PlayerLayout() {
             </div>
           </div>
           <div className="flex items-center gap-1">
+            {isGm && (
+              <Button variant="ghost" size="sm" asChild aria-label="Retour console GM">
+                <Link to="/gm">
+                  <Crown className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
