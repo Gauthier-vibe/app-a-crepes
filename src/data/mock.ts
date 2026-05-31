@@ -21,6 +21,12 @@ export type CharacterId =
 
 export type ObjectiveStatus = "pending" | "done" | "failed";
 
+export interface HiddenRole {
+  name: string;
+  power: string;
+  description: string;
+}
+
 export interface Character {
   id: CharacterId;
   code: string;
@@ -32,7 +38,9 @@ export interface Character {
   isCulprit?: boolean;
   publicStory: string;
   anecdoteHint: string; // thème de l'anecdote à glisser aux mariés
+  keyPhrase: string; // phrase clé que les enquêteurs doivent prononcer
   mainClue: string; // indice principal débloqué par l'anecdote
+  hiddenRole: HiddenRole;
 }
 
 export interface Secret {
