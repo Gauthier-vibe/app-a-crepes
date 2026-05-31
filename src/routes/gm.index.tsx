@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, ShieldAlert, MessageSquareQuote } from "lucide-react";
+import { Eye, Sparkles, UserCog, MessageSquareQuote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { characters, type CharacterId } from "@/data/mock";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
+import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/gm/")({
@@ -20,14 +21,15 @@ export const Route = createFileRoute("/gm/")({
 });
 
 function GmDashboard() {
-  const [cluesUnlocked, setCluesUnlocked] = useState<Record<string, number>>({});
+  const [cluesUnlocked] = useState<Record<string, number>>({});
   const { byId, upsert } = useCharacterClues();
+  const { setCharacter } = useCurrentCharacter();
+  const navigate = useNavigate();
 
-  const sendClue = (id: string, name: string) => {
-    setCluesUnlocked((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
-    toast.success(`Indice envoyé à ${name}`, {
-      description: "Le joueur a reçu une notification.",
-    });
+  const loginAs = (id: CharacterId, name: string) => {
+    setCharacter(id);
+    toast.success(`Connecté en tant que ${name}`);
+    navigate({ to: "/player" });
   };
 
   const assignHolder = async (charId: CharacterId, holderId: string) => {
@@ -140,9 +142,9 @@ function GmDashboard() {
                 <Button
                   size="sm"
                   className="flex-1"
-                  onClick={() => sendClue(c.id, c.name)}
+                  onClick={() => loginAs(c.id, c.name)}
                 >
-                  <ShieldAlert className="h-3.5 w-3.5 mr-1.5" /> Indice
+                  <UserCog className="h-3.5 w-3.5 mr-1.5" /> Login as
                 </Button>
               </div>
             </li>

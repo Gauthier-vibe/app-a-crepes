@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
-import { useEffect } from "react";
+import { Crown, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/player/BottomNav";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
@@ -12,10 +12,17 @@ export const Route = createFileRoute("/player")({
 function PlayerLayout() {
   const { character, loading, setCharacter } = useCurrentCharacter();
   const navigate = useNavigate();
+  const [isGm, setIsGm] = useState(false);
 
   useEffect(() => {
     if (!loading && !character) navigate({ to: "/login" });
   }, [loading, character, navigate]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsGm(localStorage.getItem("mp:is-gm") === "1");
+    }
+  }, []);
 
   if (loading || !character) {
     return (
@@ -46,6 +53,13 @@ function PlayerLayout() {
             </div>
           </div>
           <div className="flex items-center gap-1">
+            {isGm && (
+              <Button variant="ghost" size="sm" asChild aria-label="Retour console GM">
+                <Link to="/gm">
+                  <Crown className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
