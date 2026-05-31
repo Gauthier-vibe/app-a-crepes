@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Feather,
+  FlaskConical,
   Inbox,
   KeyRound,
   Loader2,
@@ -19,6 +20,7 @@ import { useRevealedClues } from "@/hooks/useRevealedClues";
 import { charactersById, type Character } from "@/data/mock";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { isBetaTester } from "@/lib/beta";
 
 export const Route = createFileRoute("/player/role")({
   head: () => ({ meta: [{ title: "Rôle caché — Murder Party" }] }),
