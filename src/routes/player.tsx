@@ -1,5 +1,5 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
+import { Crown, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/player/BottomNav";
@@ -45,17 +45,27 @@ function PlayerLayout() {
               <p className="font-serif text-base leading-none truncate">{character.name}</p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setCharacter(null);
-              navigate({ to: "/login" });
-            }}
-            aria-label="Se déconnecter"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-1">
+            {character.isGameMaster && (
+              <Button variant="outline" size="sm" asChild className="h-8 gap-1.5">
+                <Link to="/gm">
+                  <Crown className="h-3.5 w-3.5 text-primary" />
+                  <span className="font-mono text-[10px] uppercase tracking-widest">GM</span>
+                </Link>
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setCharacter(null);
+                navigate({ to: "/login" });
+              }}
+              aria-label="Se déconnecter"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </header>
 

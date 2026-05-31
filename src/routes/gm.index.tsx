@@ -82,6 +82,11 @@ function GmDashboard() {
                         ENQ
                       </Badge>
                     )}
+                    {c.isGameMaster && (
+                      <Badge className="bg-gold text-gold-foreground text-[10px] h-4 px-1.5">
+                        GM
+                      </Badge>
+                    )}
                     {c.isCulprit && (
                       <Badge variant="destructive" className="text-[10px] h-4 px-1.5">
                         Coupable
