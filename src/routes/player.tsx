@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
-import { Crown, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/player/BottomNav";
@@ -46,14 +46,6 @@ function PlayerLayout() {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            {character.isGameMaster && (
-              <Button variant="outline" size="sm" asChild className="h-8 gap-1.5">
-                <Link to="/gm">
-                  <Crown className="h-3.5 w-3.5 text-primary" />
-                  <span className="font-mono text-[10px] uppercase tracking-widest">GM</span>
-                </Link>
-              </Button>
-            )}
             <Button
               variant="ghost"
               size="sm"
