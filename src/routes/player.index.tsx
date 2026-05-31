@@ -219,10 +219,10 @@ function FichePage() {
 
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Ta phrase clé (à personnaliser)
+                  Ta phrase clé
                 </p>
                 <p className="text-[11px] text-muted-foreground">
-                  Si un·e enquêteur·rice prononce cette phrase, tu livres ton indice ci-dessous.
+                  Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
                 </p>
                 <Input
                   value={phrase}
@@ -260,7 +260,7 @@ function FichePage() {
 
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                  Indice à livrer (si ta phrase clé est prononcée)
+                  INDICE SECRET
                 </p>
                 <p className="text-sm text-foreground">{character.mainClue}</p>
               </div>
