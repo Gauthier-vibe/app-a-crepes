@@ -219,7 +219,7 @@ function FichePage() {
 
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Ta phrase clé
+                  Ton anecdote clé
                 </p>
                 <p className="text-[11px] text-muted-foreground">
                   Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
@@ -240,7 +240,7 @@ function FichePage() {
                 <p className="mt-2 text-xs text-muted-foreground italic">
                   {clueRevealed
                     ? "Indice livré aux enquêteurs."
-                    : "À livrer uniquement si on prononce ta phrase clé."}
+                    : "À livrer uniquement si on évoque ton anecdote clé."}
                 </p>
               </div>
 
