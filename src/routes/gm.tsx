@@ -1,7 +1,16 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut, PanelLeftOpen, PanelLeftClose, User } from "lucide-react";
+import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut, PanelLeftOpen, PanelLeftClose, User, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { characters, type CharacterId } from "@/data/mock";
+import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/gm")({
@@ -12,6 +21,7 @@ export const Route = createFileRoute("/gm")({
 function GmLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { character, setCharacter } = useCurrentCharacter();
   const [authorized, setAuthorized] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -23,6 +33,11 @@ function GmLayout() {
       navigate({ to: "/login" });
     }
   }, [navigate]);
+
+  const handleLoginAs = (id: CharacterId) => {
+    setCharacter(id);
+    navigate({ to: "/player" });
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("mp:is-gm");
@@ -94,6 +109,39 @@ function GmLayout() {
           </ul>
         </nav>
         <div className={cn("border-t border-sidebar-border space-y-1", collapsed ? "p-2" : "p-3")}>
+          {!collapsed ? (
+            <div className="space-y-1.5 pb-2">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-sidebar-foreground/60 flex items-center gap-1.5">
+                <UserCog className="h-3 w-3" />
+                Se connecter en tant que
+              </p>
+              <Select
+                value={character?.id ?? ""}
+                onValueChange={(v) => handleLoginAs(v as CharacterId)}
+              >
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue placeholder="Choisir un personnage…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {characters.map((c) => (
+                    <SelectItem key={c.id} value={c.id} className="text-xs">
+                      {c.name} <span className="text-muted-foreground">— {c.code}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setCollapsed(false)}
+              title="Se connecter en tant que…"
+              className="mx-auto"
+            >
+              <UserCog className="h-4 w-4" />
+            </Button>
+          )}
           <Link
             to="/player"
             title={collapsed ? "Mon personnage" : undefined}
@@ -103,7 +151,7 @@ function GmLayout() {
             )}
           >
             <User className="h-4 w-4 shrink-0" />
-            {!collapsed && <span>Mon personnage</span>}
+            {!collapsed && <span>Mon personnage{character ? ` (${character.name})` : ""}</span>}
           </Link>
           <Button
             variant="ghost"
