@@ -109,7 +109,7 @@ function FichePage() {
             <div className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-gold to-primary/40 blur-sm opacity-60" />
             <img
               src={character.image}
-              alt={character.fullName}
+              alt={character.name}
               width={256}
               height={256}
               className="relative h-24 w-24 rounded-full object-cover ring-2 ring-gold"
@@ -120,7 +120,7 @@ function FichePage() {
               Personnage
             </p>
             <h1 className="font-serif text-3xl leading-tight text-foreground">
-              {character.fullName}
+              {character.name}
             </h1>
             <p className="text-sm text-muted-foreground italic mt-0.5">
               {character.profession}

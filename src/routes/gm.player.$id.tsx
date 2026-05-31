@@ -41,7 +41,7 @@ function GmPlayerDetail() {
       <header className="flex items-start gap-4 paper-texture rounded-xl border border-border shadow-paper p-5">
         <img
           src={character.image}
-          alt={character.fullName}
+          alt={character.name}
           width={256}
           height={256}
           className="h-24 w-24 rounded-full object-cover ring-2 ring-gold shrink-0"
@@ -50,7 +50,7 @@ function GmPlayerDetail() {
           <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
             {character.code}
           </p>
-          <h1 className="font-serif text-3xl leading-tight">{character.fullName}</h1>
+          <h1 className="font-serif text-3xl leading-tight">{character.name}</h1>
           <p className="text-sm italic text-muted-foreground">{character.profession}</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {character.isInvestigator && <Badge>Enquêteur</Badge>}

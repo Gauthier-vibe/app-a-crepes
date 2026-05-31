@@ -42,7 +42,7 @@ function PlayerLayout() {
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
                 Vous incarnez
               </p>
-              <p className="font-serif text-base leading-none truncate">{character.fullName}</p>
+              <p className="font-serif text-base leading-none truncate">{character.name}</p>
             </div>
           </div>
           <Button

@@ -30,7 +30,7 @@ function RelationDetailPage() {
       <div className="relative">
         <img
           src={target.image}
-          alt={target.fullName}
+          alt={target.name}
           width={1024}
           height={1024}
           className="w-full h-72 object-cover"
@@ -50,7 +50,7 @@ function RelationDetailPage() {
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             Fiche d'invité
           </p>
-          <h1 className="font-serif text-3xl leading-tight">{target.fullName}</h1>
+          <h1 className="font-serif text-3xl leading-tight">{target.name}</h1>
           <p className="text-sm text-muted-foreground italic">{target.profession}</p>
 
           {rel ? (
