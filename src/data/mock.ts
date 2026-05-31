@@ -104,7 +104,14 @@ export const characters: Character[] = [
     publicStory:
       "Mariée du jour, maman de Jonas. Tu te marierais bien tous les jours si tu pouvais, sauf que là, le drame de Pâte à crêpes te brise le cœur. Tu es organisée, intuitive et tu n'aimes pas qu'on touche aux affaires de ton fils.",
     anecdoteHint: "—",
+    keyPhrase: "—",
     mainClue: "Tu reçois les indices au fur et à mesure.",
+    hiddenRole: {
+      name: "Enquêtrice en chef",
+      power: "Carnet d'enquête et liste des indices révélés",
+      description:
+        "Tu peux noter tes hypothèses et consulter chaque indice clé débloqué par les invités.",
+    },
   },
   {
     id: "lucas",
@@ -117,7 +124,14 @@ export const characters: Character[] = [
     publicStory:
       "Marié du jour, papa de Jonas. Cartésien, méthodique, légèrement dépassé par les émotions de la journée. Tu veux retrouver Pâte à crêpes avant le gâteau coûte que coûte.",
     anecdoteHint: "—",
+    keyPhrase: "—",
     mainClue: "Tu reçois les indices au fur et à mesure.",
+    hiddenRole: {
+      name: "Enquêteur en chef",
+      power: "Carnet d'enquête et liste des indices révélés",
+      description:
+        "Tu peux noter tes hypothèses et consulter chaque indice clé débloqué par les invités.",
+    },
   },
   {
     id: "arthur",
@@ -131,8 +145,15 @@ export const characters: Character[] = [
     publicStory:
       "Meilleur ami de Lucas depuis la fac. Tu as un talent pour les idées brillantes… et pour les catastrophes. Aujourd'hui, tu transpires beaucoup. Beaucoup trop.",
     anecdoteHint: "La fois où tu as cassé le vase chinois de la grand-mère de Lucas.",
+    keyPhrase: "« Tu te souviens du vase chinois de Mémé Victorine ? »",
     mainClue:
       "Tu avoues à demi-mot que tu as fait des courses ce matin pour 'une surprise' à Jonas, mais tu refuses d'en dire plus.",
+    hiddenRole: {
+      name: "Le Coupable",
+      power: "Diversion (1 fois)",
+      description:
+        "Tu peux demander au Maître du Jeu de lancer une rumeur publique pour détourner l'attention. À utiliser avec parcimonie.",
+    },
   },
   {
     id: "eugenie",
@@ -146,22 +167,36 @@ export const characters: Character[] = [
     publicStory:
       "Marraine attentionnée, complice d'Arthur dans toutes ses bêtises depuis l'enfance. Tu as toujours un grand sac avec toi aujourd'hui — ne demande pas pourquoi.",
     anecdoteHint: "Tes vacances en Bretagne avec Agathe quand vous aviez 17 ans.",
+    keyPhrase: "« Tu te souviens de notre été en Bretagne, à 17 ans ? »",
     mainClue:
       "Tu laisses entendre que 'parfois les vieilles choses doivent céder la place aux nouvelles'. Tu surveilles ton sac en permanence.",
+    hiddenRole: {
+      name: "La Complice",
+      power: "Bouclier (1 fois)",
+      description:
+        "Tu peux bloquer publiquement une accusation portée contre Arthur en lui fournissant un alibi. Une seule fois dans la soirée.",
+    },
   },
   {
     id: "victorine",
     code: "CORBEAU-005",
     name: "Victorine",
     fullName: "Victorine Aubry",
-    profession: "Grand-mère de Lucas — le Corbeau",
+    profession: "Grand-mère de Lucas",
     image: victorineImg,
     isInvestigator: false,
     publicStory:
       "Mémé Victorine, 72 ans, langue acérée et œil de lynx. Tu vois tout, tu sais tout, tu n'en perds pas une miette depuis ton fauteuil près de la table d'honneur.",
     anecdoteHint: "Le dimanche où Lucas a 'emprunté' ta voiture sans permis à 16 ans.",
+    keyPhrase: "« Mémé, raconte-nous la fois où j'ai pris ta voiture sans permis… »",
     mainClue:
       "Tu glisses aux mariés : « Cherchez du côté de ceux qui faisaient un cadeau aujourd'hui… et regardez bien sous les tables. »",
+    hiddenRole: {
+      name: "Le Corbeau",
+      power: "Messages anonymes signés « Le Corbeau »",
+      description:
+        "Tu peux publier dans le chat des messages anonymes signés « Le Corbeau ». Personne ne doit deviner que c'est toi avant la fin.",
+    },
   },
   {
     id: "leopold",
@@ -174,8 +209,15 @@ export const characters: Character[] = [
     publicStory:
       "Antiquaire bavard, oncle préféré d'Agathe, blagueur compulsif. Tu adores les mises en scène et les fausses pistes — surtout en soirée.",
     anecdoteHint: "Le baptême où tu as fait croire à toute la famille que tu avais perdu Jonas.",
+    keyPhrase: "« Tonton, raconte le baptême de Jonas… »",
     mainClue:
       "Tu glisses discrètement une fausse lettre de rançon : « 10 biberons de lait au chocolat sous la table du DJ, sinon Pâte à crêpes finira au four. »",
+    hiddenRole: {
+      name: "Le Bouffon",
+      power: "Fausse piste (1 fois)",
+      description:
+        "Tu peux glisser publiquement une fausse piste — sans contredire ce que dit le Maître du Jeu. Idéale pendant l'entrée.",
+    },
   },
   {
     id: "claire",
@@ -188,8 +230,15 @@ export const characters: Character[] = [
     publicStory:
       "Cousine artiste, légèrement excentrique, persuadée que les peluches ont une âme. Tu l'as dit à tout le monde au moins trois fois aujourd'hui.",
     anecdoteHint: "Le réveillon où tu as fait un dessin de toute la famille en animaux totems.",
+    keyPhrase: "« Claire, tu te souviens de tes dessins en animaux totems ? »",
     mainClue:
       "Tu jures avoir vu « une aura sombre » autour d'une nouvelle peluche que tu n'as jamais vue avant. Tu peux décrire sa forme : une grande bouche zippée.",
+    hiddenRole: {
+      name: "La Médium",
+      power: "Vision sur un objet (1 fois)",
+      description:
+        "Tu peux demander au Maître du Jeu une « vision » énigmatique sur un objet ou une personne. La réponse sera floue mais vraie.",
+    },
   },
   {
     id: "gauthier",
@@ -202,8 +251,15 @@ export const characters: Character[] = [
     publicStory:
       "Frère discret d'Agathe, observateur, plutôt timide. Tu as filmé une bonne partie de l'apéritif avec ton téléphone — par pur réflexe d'oncle.",
     anecdoteHint: "L'été où tu as appris à faire du vélo à Agathe (et où tu l'as fait tomber).",
+    keyPhrase: "« Gauthier, tu te rappelles quand tu m'as appris à faire du vélo ? »",
     mainClue:
       "Sur une vidéo prise au cocktail, on aperçoit en arrière-plan Arthur entrant dans la salle de réception avec un grand sac en papier.",
+    hiddenRole: {
+      name: "Le Témoin Silencieux",
+      power: "Diffusion de preuve vidéo",
+      description:
+        "Tu détiens une preuve filmée. Si on te le demande, tu peux la « diffuser » dans le chat en envoyant la vignette vidéo.",
+    },
   },
   {
     id: "jonas",
@@ -216,8 +272,15 @@ export const characters: Character[] = [
     publicStory:
       "Tu as 5 ans. Pâte à crêpes a disparu et c'est le pire jour de ta vie. Tu te souviens juste qu'Arthur t'a fait un gros câlin ce matin en disant : « J'ai une surprise pour toi tout à l'heure. »",
     anecdoteHint: "—",
+    keyPhrase: "« Jonas, mon cœur, raconte-nous ta journée avec parrain Arthur. »",
     mainClue:
       "Tu te rappelles que la dernière fois que tu as vu Pâte à crêpes, il était posé sur le banc à côté du sac d'Arthur.",
+    hiddenRole: {
+      name: "L'Innocent",
+      power: "Parole d'enfant",
+      description:
+        "Quand tu accuses quelqu'un, ta parole vaut double : les adultes te croient plus facilement.",
+    },
   },
 ];
 
