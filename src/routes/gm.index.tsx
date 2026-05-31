@@ -1,9 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, Target, ShieldAlert } from "lucide-react";
+import { Eye, Sparkles, Target, ShieldAlert, MessageSquareQuote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { characters, getObjectivesFor } from "@/data/mock";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { characters, getObjectivesFor, type CharacterId } from "@/data/mock";
+import { useCharacterClues } from "@/hooks/useCharacterClues";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/gm/")({
@@ -13,6 +21,7 @@ export const Route = createFileRoute("/gm/")({
 
 function GmDashboard() {
   const [cluesUnlocked, setCluesUnlocked] = useState<Record<string, number>>({});
+  const { byId, upsert } = useCharacterClues();
 
   const sendClue = (id: string, name: string) => {
     setCluesUnlocked((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
@@ -20,6 +29,12 @@ function GmDashboard() {
       description: "Le joueur a reçu une notification.",
     });
   };
+
+  const assignHolder = async (charId: CharacterId, holderId: string) => {
+    await upsert(charId, { holder_character_id: holderId === "__none" ? null : holderId });
+    toast.success("Porteur d'indice mis à jour");
+  };
+
 
   return (
     <div className="px-5 md:px-8 py-6 md:py-8 max-w-7xl mx-auto">
