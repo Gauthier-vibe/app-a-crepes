@@ -1,9 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, Target, ShieldAlert } from "lucide-react";
+import { Eye, Sparkles, Target, ShieldAlert, MessageSquareQuote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { characters, getObjectivesFor } from "@/data/mock";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { characters, getObjectivesFor, type CharacterId } from "@/data/mock";
+import { useCharacterClues } from "@/hooks/useCharacterClues";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/gm/")({
@@ -13,6 +21,7 @@ export const Route = createFileRoute("/gm/")({
 
 function GmDashboard() {
   const [cluesUnlocked, setCluesUnlocked] = useState<Record<string, number>>({});
+  const { byId, upsert } = useCharacterClues();
 
   const sendClue = (id: string, name: string) => {
     setCluesUnlocked((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
@@ -20,6 +29,12 @@ function GmDashboard() {
       description: "Le joueur a reçu une notification.",
     });
   };
+
+  const assignHolder = async (charId: CharacterId, holderId: string) => {
+    await upsert(charId, { holder_character_id: holderId === "__none" ? null : holderId });
+    toast.success("Porteur d'indice mis à jour");
+  };
+
 
   return (
     <div className="px-5 md:px-8 py-6 md:py-8 max-w-7xl mx-auto">
@@ -44,6 +59,7 @@ function GmDashboard() {
       <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {characters.map((c) => {
           const objectives = getObjectivesFor(c.id);
+          const row = byId(c.id);
           return (
             <li
               key={c.id}
@@ -85,6 +101,33 @@ function GmDashboard() {
                   <Sparkles className="h-3 w-3 text-gold" /> {cluesUnlocked[c.id] ?? 0} indice(s) envoyés
                 </span>
               </div>
+
+              {!c.isInvestigator && (
+                <div className="mt-3 rounded-md border border-primary/30 bg-primary/5 p-2.5">
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1">
+                    <MessageSquareQuote className="h-3 w-3" />
+                    Porteur de son indice phrase-clé
+                  </p>
+                  <Select
+                    value={row?.holder_character_id ?? "__none"}
+                    onValueChange={(v) => assignHolder(c.id, v)}
+                  >
+                    <SelectTrigger className="h-8 text-xs">
+                      <SelectValue placeholder="Aucun" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none">— Aucun —</SelectItem>
+                      {characters
+                        .filter((other) => other.id !== c.id && !other.isInvestigator)
+                        .map((other) => (
+                          <SelectItem key={other.id} value={other.id}>
+                            {other.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               <div className="mt-3 flex gap-2">
                 <Button

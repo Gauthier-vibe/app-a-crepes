@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookText,
   Lock,
@@ -16,6 +16,8 @@ import {
   EyeOff,
   ShieldQuestion,
   Drama,
+  Save,
+  MessageSquareQuote,
 } from "lucide-react";
 
 import {
@@ -26,6 +28,8 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -33,9 +37,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { useRevealedClues } from "@/hooks/useRevealedClues";
+import { useCharacterClues } from "@/hooks/useCharacterClues";
 import {
+  charactersById,
   getInventoryFor,
   getObjectivesFor,
   getSecretsFor,
@@ -53,7 +60,19 @@ export const Route = createFileRoute("/player/")({
 function FichePage() {
   const { character } = useCurrentCharacter();
   const { isRevealed, reveal, unreveal } = useRevealedClues();
+  const { byId, upsert } = useCharacterClues();
   const [openSecret, setOpenSecret] = useState<Secret | null>(null);
+  const [phrase, setPhrase] = useState("");
+  const [clue, setClue] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const stored = character ? byId(character.id) : null;
+  useEffect(() => {
+    if (stored) {
+      setPhrase(stored.key_phrase ?? "");
+      setClue(stored.key_phrase_clue ?? "");
+    }
+  }, [stored?.character_id, stored?.key_phrase, stored?.key_phrase_clue]);
 
   if (!character) return null;
   const secrets = getSecretsFor(character.id);
@@ -61,6 +80,25 @@ function FichePage() {
   const items = getInventoryFor(character.id);
   const clueRevealed = isRevealed(character.id);
   const hasKeyClue = !character.isInvestigator && character.anecdoteHint !== "—";
+  const holder = stored?.holder_character_id
+    ? charactersById[stored.holder_character_id as keyof typeof charactersById]
+    : null;
+
+  const savePhrase = async () => {
+    if (!character) return;
+    setSaving(true);
+    try {
+      await upsert(character.id, {
+        key_phrase: phrase.trim() || null,
+        key_phrase_clue: clue.trim() || null,
+      });
+      toast.success("Phrase clé et indice enregistrés");
+    } catch {
+      toast.error("Échec de l'enregistrement");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="px-4 pt-5 pb-6 space-y-6">
@@ -191,19 +229,54 @@ function FichePage() {
               </h2>
               <p className="mt-2 text-sm text-foreground/90">{character.anecdoteHint}</p>
 
-              <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                  Phrase clé à attendre
+              <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Ta phrase clé (à personnaliser)
                 </p>
-                <p className="text-sm italic text-foreground">{character.keyPhrase}</p>
+                <Input
+                  value={phrase}
+                  onChange={(e) => setPhrase(e.target.value)}
+                  placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
+                  className="text-sm italic"
+                />
+                <p className="text-[11px] text-muted-foreground">
+                  Si un·e enquêteur·rice prononce cette phrase, tu livres ton indice ci-dessous.
+                </p>
+              </div>
+
+              <div className="mt-3 rounded-md border border-primary/40 bg-primary/5 p-3 space-y-2">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                  <MessageSquareQuote className="h-3 w-3" />
+                  Indice phrase-clé (transmis par un autre)
+                </p>
+                <Textarea
+                  value={clue}
+                  onChange={(e) => setClue(e.target.value)}
+                  placeholder="Décris en une phrase l'indice qui permettra aux enquêteurs de deviner ta phrase clé."
+                  rows={3}
+                  className="text-sm"
+                />
+                <p className="text-[11px] text-muted-foreground">
+                  {holder
+                    ? `Cet indice sera transmis aux enquêteurs par ${holder.name}.`
+                    : "Le Game Master désignera le personnage qui transmettra cet indice aux enquêteurs."}
+                </p>
+              </div>
+
+              <div className="mt-3">
+                <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
+                  <Save className="h-4 w-4 mr-1.5" />
+                  {saving ? "Enregistrement…" : "Enregistrer phrase & indice"}
+                </Button>
               </div>
 
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                  Indice à livrer
+                  Indice à livrer (si ta phrase clé est prononcée)
                 </p>
                 <p className="text-sm text-foreground">{character.mainClue}</p>
               </div>
+
 
               <div className="mt-4 flex items-center justify-between gap-3">
                 <p className="text-xs text-muted-foreground italic">
