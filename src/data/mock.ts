@@ -99,7 +99,6 @@ export interface TimelineStep {
   status: "locked" | "ready" | "done";
 }
 
-const PLACEHOLDER = "[À personnaliser : votre anecdote personnelle avec ce personnage]";
 const PLACEHOLDER_PHRASE = "[À personnaliser : la phrase clé que les enquêteurs doivent prononcer]";
 
 export const characters: Character[] = [
