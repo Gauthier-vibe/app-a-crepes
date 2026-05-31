@@ -11,12 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PlayerRouteImport } from './routes/player'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GmRouteImport } from './routes/gm'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayerIndexRouteImport } from './routes/player.index'
+import { Route as GmIndexRouteImport } from './routes/gm.index'
 import { Route as PlayerRelationsRouteImport } from './routes/player.relations'
 import { Route as PlayerNotesRouteImport } from './routes/player.notes'
 import { Route as PlayerChatRouteImport } from './routes/player.chat'
+import { Route as GmTimelineRouteImport } from './routes/gm.timeline'
+import { Route as GmChatRouteImport } from './routes/gm.chat'
 import { Route as PlayerRelationsIdRouteImport } from './routes/player.relations.$id'
+import { Route as GmPlayerIdRouteImport } from './routes/gm.player.$id'
 
 const PlayerRoute = PlayerRouteImport.update({
   id: '/player',
@@ -28,6 +33,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GmRoute = GmRouteImport.update({
+  id: '/gm',
+  path: '/gm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,6 +47,11 @@ const PlayerIndexRoute = PlayerIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PlayerRoute,
+} as any)
+const GmIndexRoute = GmIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GmRoute,
 } as any)
 const PlayerRelationsRoute = PlayerRelationsRouteImport.update({
   id: '/relations',
@@ -53,76 +68,120 @@ const PlayerChatRoute = PlayerChatRouteImport.update({
   path: '/chat',
   getParentRoute: () => PlayerRoute,
 } as any)
+const GmTimelineRoute = GmTimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => GmRoute,
+} as any)
+const GmChatRoute = GmChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => GmRoute,
+} as any)
 const PlayerRelationsIdRoute = PlayerRelationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => PlayerRelationsRoute,
 } as any)
+const GmPlayerIdRoute = GmPlayerIdRouteImport.update({
+  id: '/player/$id',
+  path: '/player/$id',
+  getParentRoute: () => GmRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gm': typeof GmRouteWithChildren
   '/login': typeof LoginRoute
   '/player': typeof PlayerRouteWithChildren
+  '/gm/chat': typeof GmChatRoute
+  '/gm/timeline': typeof GmTimelineRoute
   '/player/chat': typeof PlayerChatRoute
   '/player/notes': typeof PlayerNotesRoute
   '/player/relations': typeof PlayerRelationsRouteWithChildren
+  '/gm/': typeof GmIndexRoute
   '/player/': typeof PlayerIndexRoute
+  '/gm/player/$id': typeof GmPlayerIdRoute
   '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/gm/chat': typeof GmChatRoute
+  '/gm/timeline': typeof GmTimelineRoute
   '/player/chat': typeof PlayerChatRoute
   '/player/notes': typeof PlayerNotesRoute
   '/player/relations': typeof PlayerRelationsRouteWithChildren
+  '/gm': typeof GmIndexRoute
   '/player': typeof PlayerIndexRoute
+  '/gm/player/$id': typeof GmPlayerIdRoute
   '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gm': typeof GmRouteWithChildren
   '/login': typeof LoginRoute
   '/player': typeof PlayerRouteWithChildren
+  '/gm/chat': typeof GmChatRoute
+  '/gm/timeline': typeof GmTimelineRoute
   '/player/chat': typeof PlayerChatRoute
   '/player/notes': typeof PlayerNotesRoute
   '/player/relations': typeof PlayerRelationsRouteWithChildren
+  '/gm/': typeof GmIndexRoute
   '/player/': typeof PlayerIndexRoute
+  '/gm/player/$id': typeof GmPlayerIdRoute
   '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/gm'
     | '/login'
     | '/player'
+    | '/gm/chat'
+    | '/gm/timeline'
     | '/player/chat'
     | '/player/notes'
     | '/player/relations'
+    | '/gm/'
     | '/player/'
+    | '/gm/player/$id'
     | '/player/relations/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/gm/chat'
+    | '/gm/timeline'
     | '/player/chat'
     | '/player/notes'
     | '/player/relations'
+    | '/gm'
     | '/player'
+    | '/gm/player/$id'
     | '/player/relations/$id'
   id:
     | '__root__'
     | '/'
+    | '/gm'
     | '/login'
     | '/player'
+    | '/gm/chat'
+    | '/gm/timeline'
     | '/player/chat'
     | '/player/notes'
     | '/player/relations'
+    | '/gm/'
     | '/player/'
+    | '/gm/player/$id'
     | '/player/relations/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GmRoute: typeof GmRouteWithChildren
   LoginRoute: typeof LoginRoute
   PlayerRoute: typeof PlayerRouteWithChildren
 }
@@ -143,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gm': {
+      id: '/gm'
+      path: '/gm'
+      fullPath: '/gm'
+      preLoaderRoute: typeof GmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -156,6 +222,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/player/'
       preLoaderRoute: typeof PlayerIndexRouteImport
       parentRoute: typeof PlayerRoute
+    }
+    '/gm/': {
+      id: '/gm/'
+      path: '/'
+      fullPath: '/gm/'
+      preLoaderRoute: typeof GmIndexRouteImport
+      parentRoute: typeof GmRoute
     }
     '/player/relations': {
       id: '/player/relations'
@@ -178,6 +251,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerChatRouteImport
       parentRoute: typeof PlayerRoute
     }
+    '/gm/timeline': {
+      id: '/gm/timeline'
+      path: '/timeline'
+      fullPath: '/gm/timeline'
+      preLoaderRoute: typeof GmTimelineRouteImport
+      parentRoute: typeof GmRoute
+    }
+    '/gm/chat': {
+      id: '/gm/chat'
+      path: '/chat'
+      fullPath: '/gm/chat'
+      preLoaderRoute: typeof GmChatRouteImport
+      parentRoute: typeof GmRoute
+    }
     '/player/relations/$id': {
       id: '/player/relations/$id'
       path: '/$id'
@@ -185,8 +272,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerRelationsIdRouteImport
       parentRoute: typeof PlayerRelationsRoute
     }
+    '/gm/player/$id': {
+      id: '/gm/player/$id'
+      path: '/player/$id'
+      fullPath: '/gm/player/$id'
+      preLoaderRoute: typeof GmPlayerIdRouteImport
+      parentRoute: typeof GmRoute
+    }
   }
 }
+
+interface GmRouteChildren {
+  GmChatRoute: typeof GmChatRoute
+  GmTimelineRoute: typeof GmTimelineRoute
+  GmIndexRoute: typeof GmIndexRoute
+  GmPlayerIdRoute: typeof GmPlayerIdRoute
+}
+
+const GmRouteChildren: GmRouteChildren = {
+  GmChatRoute: GmChatRoute,
+  GmTimelineRoute: GmTimelineRoute,
+  GmIndexRoute: GmIndexRoute,
+  GmPlayerIdRoute: GmPlayerIdRoute,
+}
+
+const GmRouteWithChildren = GmRoute._addFileChildren(GmRouteChildren)
 
 interface PlayerRelationsRouteChildren {
   PlayerRelationsIdRoute: typeof PlayerRelationsIdRoute
@@ -219,6 +329,7 @@ const PlayerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GmRoute: GmRouteWithChildren,
   LoginRoute: LoginRoute,
   PlayerRoute: PlayerRouteWithChildren,
 }
