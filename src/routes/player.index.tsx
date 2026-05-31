@@ -222,7 +222,7 @@ function FichePage() {
                   Ton anecdote clé
                 </p>
                 <p className="text-[11px] text-muted-foreground">
-                  Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
+                  Choisi un souvenir rigolo ou émouvant avec les mariés.
                 </p>
                 <Textarea
                   value={phrase}
