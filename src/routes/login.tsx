@@ -30,9 +30,11 @@ function LoginPage() {
 
     if (value.toUpperCase() === GM_CODE) {
       setUnlocking(true);
+      localStorage.setItem("mp:is-gm", "1");
       setTimeout(() => navigate({ to: "/gm" }), 600);
       return;
     }
+
 
     const character = findCharacterByCode(value);
     if (!character) {
