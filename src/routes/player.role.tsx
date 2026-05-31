@@ -33,16 +33,27 @@ function RolePage() {
 
   return (
     <div className="px-4 pt-5 pb-6 space-y-4">
-      <header>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          Espace secret
-        </p>
-        <h1 className="font-serif text-3xl leading-tight flex items-center gap-2">
-          <VenetianMask className="h-6 w-6 text-primary" />
-          {character.hiddenRole.name}
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">{character.hiddenRole.description}</p>
-      </header>
+      {/* Carte rôle caché */}
+      <section className="relative rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-gold/5 p-5 shadow-paper">
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-paper">
+            <Feather className="h-5 w-5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Rôle caché — ne pas révéler
+            </p>
+            <h2 className="font-serif text-2xl leading-tight">{character.hiddenRole.name}</h2>
+            <p className="mt-1.5 text-sm">
+              <span className="font-medium text-primary">Pouvoir :</span>{" "}
+              <span className="text-foreground/90">{character.hiddenRole.power}</span>
+            </p>
+            <p className="mt-1 text-sm text-foreground/80 leading-relaxed">
+              {character.hiddenRole.description}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {character.isInvestigator ? (
         <InvestigatorPanel character={character} />
