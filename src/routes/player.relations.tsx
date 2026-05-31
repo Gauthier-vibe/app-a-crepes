@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, KeyRound, MessageSquareQuote, Check } from "lucide-react";
+import { ChevronRight, KeyRound, MessageSquareQuote, Check, FlaskConical } from "lucide-react";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { useRevealedClues } from "@/hooks/useRevealedClues";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
@@ -8,6 +8,7 @@ import { characters, getRelationBetween } from "@/data/mock";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { KillerGameCard } from "@/components/player/KillerGameCard";
+import { isBetaTester } from "@/lib/beta";
 
 export const Route = createFileRoute("/player/relations")({
   head: () => ({ meta: [{ title: "Relations — Murder Party" }] }),
@@ -19,6 +20,27 @@ function RelationsPage() {
   const { isRevealed } = useRevealedClues();
   const { rows, upsert } = useCharacterClues();
   if (!character) return null;
+
+  if (!isBetaTester(character.id)) {
+    return (
+      <div className="px-4 pt-10 pb-10 max-w-md mx-auto text-center">
+        <div className="mx-auto mb-4 h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+          <FlaskConical className="h-7 w-7 text-primary" />
+        </div>
+        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+          Bêta test
+        </p>
+        <h1 className="font-serif text-2xl mb-2">Fonctionnalité en cours de test</h1>
+        <p className="text-sm text-muted-foreground">
+          L'onglet « Relations » est actuellement réservé aux bêta-testeurs.
+          Il sera ouvert à tous les joueurs prochainement.
+        </p>
+        <Button asChild variant="outline" className="mt-5">
+          <Link to="/player">Retour à ma fiche</Link>
+        </Button>
+      </div>
+    );
+  }
 
   const others = characters.filter((c) => c.id !== character.id);
   const showClueMarker = character.isInvestigator;
