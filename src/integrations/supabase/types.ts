@@ -44,25 +44,28 @@ export type Database = {
       chat_messages: {
         Row: {
           channel: string
-          content: string
+          content: string | null
           created_at: string
           id: string
+          image_url: string | null
           sender_character_id: string
           sender_display_name: string
         }
         Insert: {
           channel: string
-          content: string
+          content?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           sender_character_id: string
           sender_display_name: string
         }
         Update: {
           channel?: string
-          content?: string
+          content?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           sender_character_id?: string
           sender_display_name?: string
         }
