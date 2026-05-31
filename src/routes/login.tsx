@@ -114,17 +114,28 @@ function LoginPage() {
           <summary className="cursor-pointer text-center hover:text-foreground transition-colors">
             Codes de démo
           </summary>
-          <div className="mt-3 grid grid-cols-2 gap-1.5 font-mono text-[11px]">
-            <code className="px-2 py-1 bg-muted rounded">MARIEE-001</code>
-            <code className="px-2 py-1 bg-muted rounded">MARIE-002</code>
-            <code className="px-2 py-1 bg-muted rounded">PARRAIN-003</code>
-            <code className="px-2 py-1 bg-muted rounded">MARRAINE-004</code>
-            <code className="px-2 py-1 bg-muted rounded">CORBEAU-005</code>
-            <code className="px-2 py-1 bg-muted rounded">TEMOIN-006</code>
-            <code className="px-2 py-1 bg-muted rounded">TEMOIN-007</code>
-            <code className="px-2 py-1 bg-muted rounded">TEMOIN-008</code>
-            <code className="px-2 py-1 bg-muted rounded">JONAS-009</code>
-            <code className="px-2 py-1 bg-muted rounded">GM-MAITRE-DU-JEU</code>
+          <div className="mt-3 grid grid-cols-1 gap-1.5 font-mono text-[11px]">
+            {[
+              ["MARIEE-001", "Agathe — Enquêtrice"],
+              ["MARIE-002", "Lucas — Enquêteur"],
+              ["PARRAIN-003", "Arthur — Le Coupable"],
+              ["MARRAINE-004", "Eugénie — La Complice"],
+              ["PAPY-005", "Papy Hervé"],
+              ["TONTON-006", "Gauthier"],
+              ["PHOTO-007", "Julie"],
+              ["PAPA-008", "Antoine"],
+              ["MAMAN-009", "Lénaïc"],
+              ["TONTON-010", "Léopold"],
+              ["MAMIE-011", "Mamie Christelle"],
+              ["MEDIUM-012", "Claire — La Médium"],
+              ["CORBEAU-013", "Victorine — Le Corbeau"],
+              ["GM-MAITRE-DU-JEU", "Game Master"],
+            ].map(([c, label]) => (
+              <div key={c} className="flex items-center justify-between gap-2 px-2 py-1 bg-muted rounded">
+                <code>{c}</code>
+                <span className="text-muted-foreground not-italic">{label}</span>
+              </div>
+            ))}
           </div>
         </details>
       </div>
