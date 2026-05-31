@@ -31,6 +31,27 @@ function RolePage() {
   const { character } = useCurrentCharacter();
   if (!character) return null;
 
+  if (!isBetaTester(character.id)) {
+    return (
+      <div className="px-4 pt-10 pb-10 max-w-md mx-auto text-center">
+        <div className="mx-auto mb-4 h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+          <FlaskConical className="h-7 w-7 text-primary" />
+        </div>
+        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+          Bêta test
+        </p>
+        <h1 className="font-serif text-2xl mb-2">Fonctionnalité en cours de test</h1>
+        <p className="text-sm text-muted-foreground">
+          L'onglet « Rôle » est actuellement réservé aux bêta-testeurs.
+          Il sera ouvert à tous les joueurs prochainement.
+        </p>
+        <Button asChild variant="outline" className="mt-5">
+          <Link to="/player">Retour à ma fiche</Link>
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="px-4 pt-5 pb-6 space-y-4">
       {/* Carte rôle caché */}
