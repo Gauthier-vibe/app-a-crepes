@@ -39,7 +39,6 @@ import { useCharacterClues } from "@/hooks/useCharacterClues";
 import {
   charactersById,
   getInventoryFor,
-  getObjectivesFor,
   getSecretsFor,
   type Secret,
 } from "@/data/mock";
