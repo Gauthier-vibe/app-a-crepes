@@ -217,61 +217,19 @@ function FichePage() {
               </h2>
               <p className="mt-2 text-sm text-foreground/90">{character.anecdoteHint}</p>
 
-              <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Ta phrase clé
-                </p>
-                <p className="text-[11px] text-muted-foreground">
-                  Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
-                </p>
-                <Input
-                  value={phrase}
-                  onChange={(e) => setPhrase(e.target.value)}
-                  placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
-                  className="text-sm italic"
-                />
-              </div>
-
-              <div className="mt-3 rounded-md border border-primary/40 bg-primary/5 p-3 space-y-2">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                  <MessageSquareQuote className="h-3 w-3" />
-                  Indice phrase-clé (transmis par un autre)
-                </p>
-                <p className="text-[11px] text-muted-foreground">
-                  {holder
-                    ? `Cet indice sera transmis aux enquêteurs par ${holder.name}.`
-                    : "Un autre invité transmettra cet indice aux enquêteurs."}
-                </p>
-                <Textarea
-                  value={clue}
-                  onChange={(e) => setClue(e.target.value)}
-                  placeholder="Décris en une phrase l'indice qui permettra aux enquêteurs de deviner ta phrase clé."
-                  rows={3}
-                  className="text-sm"
-                />
-              </div>
-
-              <div className="mt-3">
-                <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
-                  <Save className="h-4 w-4 mr-1.5" />
-                  {saving ? "Enregistrement…" : "Enregistrer phrase & indice"}
-                </Button>
-              </div>
-
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
                   INDICE SECRET
                 </p>
                 <p className="text-sm text-foreground">{character.mainClue}</p>
-              </div>
-
-
-              <div className="mt-4 flex items-center justify-between gap-3">
-                <p className="text-xs text-muted-foreground italic">
+                <p className="mt-2 text-xs text-muted-foreground italic">
                   {clueRevealed
                     ? "Indice livré aux enquêteurs."
                     : "À livrer uniquement si on prononce ta phrase clé."}
                 </p>
+              </div>
+
+              <div className="mt-4 flex items-center justify-end gap-3">
                 {clueRevealed ? (
                   <Button
                     size="sm"
