@@ -10,6 +10,10 @@ import {
   Check,
   X,
   Clock,
+  Feather,
+  KeyRound,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   Accordion,
@@ -18,6 +22,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
+import { useRevealedClues } from "@/hooks/useRevealedClues";
 import {
   getInventoryFor,
   getObjectivesFor,
