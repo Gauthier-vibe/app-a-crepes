@@ -14,7 +14,10 @@ import {
   KeyRound,
   Eye,
   EyeOff,
+  ShieldQuestion,
+  Drama,
 } from "lucide-react";
+
 import {
   Accordion,
   AccordionContent,
