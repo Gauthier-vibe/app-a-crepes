@@ -217,6 +217,21 @@ function FichePage() {
               </h2>
               <p className="mt-2 text-sm text-foreground/90">{character.anecdoteHint}</p>
 
+              <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Ta phrase clé
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
+                </p>
+                <Input
+                  value={phrase}
+                  onChange={(e) => setPhrase(e.target.value)}
+                  placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
+                  className="text-sm italic"
+                />
+              </div>
+
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
                   INDICE SECRET
