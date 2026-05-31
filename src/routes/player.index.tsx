@@ -285,6 +285,54 @@ function FichePage() {
           )}
         </AccordionShell>
 
+        <AccordionShell
+          value="key-phrase"
+          icon={KeyRound}
+          label="Ma phrase clé & indice transmis"
+          tone="primary"
+        >
+          <div className="space-y-3">
+            <div className="rounded-md border border-border bg-background/70 p-3 space-y-2">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                Ta phrase clé
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                Si un·e enquêteur·rice évoque ton anecdote livre ton indice secret.
+              </p>
+              <Input
+                value={phrase}
+                onChange={(e) => setPhrase(e.target.value)}
+                placeholder="Ex. : « Tu te souviens de notre voyage à Bali ? »"
+                className="text-sm italic"
+              />
+            </div>
+
+            <div className="rounded-md border border-primary/40 bg-primary/5 p-3 space-y-2">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                <MessageSquareQuote className="h-3 w-3" />
+                Indice phrase-clé (transmis par un autre)
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                {holder
+                  ? `Cet indice sera transmis aux enquêteurs par ${holder.name}.`
+                  : "Un autre invité transmettra cet indice aux enquêteurs."}
+              </p>
+              <Textarea
+                value={clue}
+                onChange={(e) => setClue(e.target.value)}
+                placeholder="Décris en une phrase l'indice qui permettra aux enquêteurs de deviner ta phrase clé."
+                rows={3}
+                className="text-sm"
+              />
+            </div>
+
+            <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
+              <Save className="h-4 w-4 mr-1.5" />
+              {saving ? "Enregistrement…" : "Enregistrer phrase & indice"}
+            </Button>
+          </div>
+        </AccordionShell>
+
         <AccordionShell value="inventory" icon={Backpack} label="Mon inventaire" count={items.length}>
           {items.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Les poches vides.</p>
