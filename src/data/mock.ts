@@ -243,6 +243,7 @@ export const characters: Character[] = [
     profession: "Mari de Victorine — le tonton « beauf »",
     image: gauthierImg,
     isInvestigator: false,
+    isGameMaster: true,
     publicStory:
       "Le tonton un peu beauf et super maladroit, engagé dans une guerre d'ego avec Léopold. Tu t'es assis sur Pâte à crêpes il y a quelques mois et tu l'avais recousue avec du gros fil de pêche. Tu aurais pu vouloir la faire disparaître pour cacher les preuves de ta mauvaise couture.",
     alibi:
