@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, KeyRound } from "lucide-react";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
+import { useRevealedClues } from "@/hooks/useRevealedClues";
 import { characters, getRelationBetween } from "@/data/mock";
 
 export const Route = createFileRoute("/player/relations")({
@@ -10,9 +11,11 @@ export const Route = createFileRoute("/player/relations")({
 
 function RelationsPage() {
   const { character } = useCurrentCharacter();
+  const { isRevealed } = useRevealedClues();
   if (!character) return null;
 
   const others = characters.filter((c) => c.id !== character.id);
+  const showClueMarker = character.isInvestigator;
 
   return (
     <div className="px-4 pt-5 pb-6">
@@ -49,6 +52,14 @@ function RelationsPage() {
                   {c.isInvestigator && (
                     <span className="absolute top-2 left-2 font-mono text-[9px] uppercase tracking-widest bg-primary text-primary-foreground rounded-full px-2 py-0.5">
                       Enquêteur
+                    </span>
+                  )}
+                  {showClueMarker && isRevealed(c.id) && (
+                    <span
+                      className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-paper ring-2 ring-background"
+                      title="Indice clé livré"
+                    >
+                      <KeyRound className="h-3.5 w-3.5" />
                     </span>
                   )}
                 </div>
