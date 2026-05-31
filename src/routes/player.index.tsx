@@ -14,7 +14,10 @@ import {
   KeyRound,
   Eye,
   EyeOff,
+  ShieldQuestion,
+  Drama,
 } from "lucide-react";
+
 import {
   Accordion,
   AccordionContent,
@@ -120,6 +123,43 @@ function FichePage() {
           </div>
         </div>
       </section>
+
+      {/* Alibi & consigne de jeu (suspects uniquement) */}
+      {!character.isInvestigator && (
+        <section className="grid grid-cols-1 gap-3">
+          <div className="paper-texture rounded-2xl border border-border shadow-paper p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
+                <ShieldQuestion className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Ton alibi (à raconter)
+                </p>
+                <p className="mt-1 text-sm italic text-foreground/90 leading-relaxed">
+                  {character.alibi}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-accent/50 bg-accent/10 p-4 shadow-paper">
+            <div className="flex items-start gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+                <Drama className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Consigne pour la soirée
+                </p>
+                <p className="mt-1 text-sm text-foreground/90 leading-relaxed">
+                  {character.directive}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
 
       {/* Indice clé */}
       {hasKeyClue && (
