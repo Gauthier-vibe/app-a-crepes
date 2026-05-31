@@ -22,7 +22,7 @@ export function BottomNav() {
     { to: "/player", label: "Fiche", icon: BookOpen, match: (p) => p === "/player" || p === "/player/" },
     { to: "/player/relations", label: "Relations", icon: Users, match: (p) => p.startsWith("/player/relations"), beta: true },
     { to: "/player/chat", label: "Chat", icon: MessageCircle, match: (p) => p.startsWith("/player/chat") },
-    { to: "/player/role", label: "Rôle", icon: VenetianMask, match: (p) => p.startsWith("/player/role") },
+    { to: "/player/role", label: "Rôle", icon: VenetianMask, match: (p) => p.startsWith("/player/role"), beta: true },
     { to: "/player/help", label: "Help", icon: LifeBuoy, match: (p) => p.startsWith("/player/help") },
   ];
   const items = allItems.filter((i) => !i.beta || beta);
