@@ -110,6 +110,43 @@ function ChatPage() {
     setSending(false);
   };
 
+  const handleImagePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Format non supporté", { description: "Choisissez une image." });
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Image trop lourde", { description: "Taille maximum : 8 Mo." });
+      return;
+    }
+    setUploading(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${character.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("chat-media")
+      .upload(path, file, { contentType: file.type, upsert: false });
+    if (upErr) {
+      toast.error("Envoi de l'image impossible", { description: upErr.message });
+      setUploading(false);
+      return;
+    }
+    const { data: pub } = supabase.storage.from("chat-media").getPublicUrl(path);
+    const { error } = await supabase.from("chat_messages").insert({
+      channel: "global",
+      sender_character_id: character.id,
+      sender_display_name: character.name,
+      content: null,
+      image_url: pub.publicUrl,
+    });
+    if (error) {
+      toast.error("Message non envoyé", { description: error.message });
+    }
+    setUploading(false);
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
       <header className="px-4 py-3 border-b border-border bg-card/60">
@@ -142,12 +179,24 @@ function ChatPage() {
         onSubmit={send}
         className="flex items-center gap-2 border-t border-border bg-card/80 backdrop-blur px-3 py-2.5"
       >
-        <Button type="button" variant="ghost" size="icon" aria-label="Joindre une image" disabled>
-          <ImageIcon className="h-4 w-4" />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImagePick}
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="Joindre une image"
+          disabled={uploading}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
         </Button>
-        <Button type="button" variant="ghost" size="icon" aria-label="Joindre une vidéo" disabled>
-          <Video className="h-4 w-4" />
-        </Button>
+
         <Input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
