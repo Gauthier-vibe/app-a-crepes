@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Send, Image as ImageIcon, Video, Feather, Loader2 } from "lucide-react";
+import { Send, Image as ImageIcon, Feather, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/player/chat")({
   head: () => ({ meta: [{ title: "Chat — Murder Party" }] }),
   component: ChatPage,
 });
+
 
 interface LiveMessage {
   id: string;
