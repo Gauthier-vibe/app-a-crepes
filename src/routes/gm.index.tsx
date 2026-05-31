@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, Target, ShieldAlert, MessageSquareQuote } from "lucide-react";
+import { Eye, Sparkles, ShieldAlert, MessageSquareQuote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { characters, getObjectivesFor, type CharacterId } from "@/data/mock";
+import { characters, type CharacterId } from "@/data/mock";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
 import { toast } from "sonner";
 
