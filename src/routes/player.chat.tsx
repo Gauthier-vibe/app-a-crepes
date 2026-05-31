@@ -20,9 +20,11 @@ interface LiveMessage {
   channel: string;
   sender_character_id: string;
   sender_display_name: string;
-  content: string;
+  content: string | null;
+  image_url: string | null;
   created_at: string;
 }
+
 
 function formatTime(iso: string) {
   return new Intl.DateTimeFormat("fr-FR", {
