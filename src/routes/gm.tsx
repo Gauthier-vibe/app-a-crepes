@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut } from "lucide-react";
+import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut, PanelLeftOpen, PanelLeftClose, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
