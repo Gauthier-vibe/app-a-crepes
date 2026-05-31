@@ -1,4 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Crown, LayoutDashboard, MessageCircle, ListChecks, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,24 @@ export const Route = createFileRoute("/gm")({
 function GmLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (localStorage.getItem("mp:is-gm") === "1") {
+      setAuthorized(true);
+    } else {
+      navigate({ to: "/login" });
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("mp:is-gm");
+    navigate({ to: "/login" });
+  };
+
+  if (!authorized) return null;
+
 
   const items = [
     { to: "/gm", label: "Vue d'ensemble", icon: LayoutDashboard, match: pathname === "/gm" },
@@ -58,7 +77,8 @@ function GmLayout() {
           <Button
             variant="ghost"
             className="w-full justify-start"
-            onClick={() => navigate({ to: "/login" })}
+            onClick={handleLogout}
+
           >
             <LogOut className="h-4 w-4 mr-2" />
             Quitter
@@ -89,7 +109,7 @@ function GmLayout() {
                 <Icon className="h-4 w-4" />
               </Link>
             ))}
-            <Button variant="ghost" size="icon" onClick={() => navigate({ to: "/login" })}>
+            <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Quitter">
               <LogOut className="h-4 w-4" />
             </Button>
           </nav>
