@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import {
   BookText,
   Lock,
-  Target,
   Backpack,
   Sparkles,
   ChevronRight,
-  Check,
-  X,
-  Clock,
   KeyRound,
   Eye,
   EyeOff,
