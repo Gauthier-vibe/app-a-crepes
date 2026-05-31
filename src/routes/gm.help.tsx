@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { LifeBuoy, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { charactersById, characters, type CharacterId } from "@/data/mock";
+import { charactersById, type CharacterId } from "@/data/mock";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -245,8 +245,6 @@ function GmHelpPage() {
         </section>
       </div>
 
-      {/* Hidden reference so unused import doesn't trip TS */}
-      <span className="hidden">{characters.length}</span>
     </div>
   );
 }
