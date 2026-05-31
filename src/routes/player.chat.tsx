@@ -1,22 +1,83 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Send, Image as ImageIcon, Video, Feather } from "lucide-react";
+import { Send, Image as ImageIcon, Video, Feather, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
-import { charactersById, messages as seedMessages, type ChatMessage, type CharacterId } from "@/data/mock";
+import { charactersById, type CharacterId } from "@/data/mock";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/player/chat")({
   head: () => ({ meta: [{ title: "Chat — Murder Party" }] }),
   component: ChatPage,
 });
 
+interface LiveMessage {
+  id: string;
+  channel: string;
+  sender_character_id: string;
+  sender_display_name: string;
+  content: string;
+  created_at: string;
+}
+
+function formatTime(iso: string) {
+  return new Intl.DateTimeFormat("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
+
 function ChatPage() {
   const { character } = useCurrentCharacter();
-  const [messages, setMessages] = useState<ChatMessage[]>(seedMessages);
+  const [messages, setMessages] = useState<LiveMessage[]>([]);
   const [draft, setDraft] = useState("");
+  const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Initial load + realtime subscription
+  useEffect(() => {
+    let mounted = true;
+
+    (async () => {
+      const { data, error } = await supabase
+        .from("chat_messages")
+        .select("*")
+        .eq("channel", "global")
+        .order("created_at", { ascending: true })
+        .limit(500);
+      if (!mounted) return;
+      if (error) {
+        toast.error("Chat indisponible", { description: error.message });
+      } else {
+        setMessages(data as LiveMessage[]);
+      }
+      setLoading(false);
+    })();
+
+    const channel = supabase
+      .channel("chat_messages:global")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "chat_messages", filter: "channel=eq.global" },
+        (payload) => {
+          setMessages((m) => {
+            const next = payload.new as LiveMessage;
+            if (m.some((x) => x.id === next.id)) return m;
+            return [...m, next];
+          });
+        },
+      )
+      .subscribe();
+
+    return () => {
+      mounted = false;
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -24,37 +85,47 @@ function ChatPage() {
 
   if (!character) return null;
 
-  const send = (e: React.FormEvent) => {
+  const send = async (e: React.FormEvent) => {
     e.preventDefault();
     const value = draft.trim();
-    if (!value) return;
-    setMessages((m) => [
-      ...m,
-      {
-        id: `m-local-${m.length}`,
-        senderId: character.id,
-        content: value,
-        mediaType: "text",
-        timestamp: new Intl.DateTimeFormat("fr-FR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }).format(new Date()),
-      },
-    ]);
+    if (!value || sending) return;
+    setSending(true);
     setDraft("");
+    const { error } = await supabase.from("chat_messages").insert({
+      channel: "global",
+      sender_character_id: character.id,
+      sender_display_name: character.name,
+      content: value,
+    });
+    if (error) {
+      toast.error("Message non envoyé", { description: error.message });
+      setDraft(value);
+    }
+    setSending(false);
   };
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
       <header className="px-4 py-3 border-b border-border bg-card/60">
         <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          Salon commun
+          Salon commun · en direct
         </p>
         <h1 className="font-serif text-xl leading-none mt-0.5">Le chat des convives</h1>
       </header>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <div className="px-3 py-4 space-y-3">
+          {loading && (
+            <div className="flex items-center justify-center py-6 text-muted-foreground text-sm">
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Chargement des messages…
+            </div>
+          )}
+          {!loading && messages.length === 0 && (
+            <p className="text-center text-xs text-muted-foreground italic py-6">
+              Aucun message. Soyez le premier à briser le silence.
+            </p>
+          )}
           {messages.map((m) => (
             <Bubble key={m.id} message={m} currentId={character.id} />
           ))}
@@ -76,17 +147,20 @@ function ChatPage() {
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Murmurer un message…"
           className="flex-1 bg-background"
+          maxLength={500}
         />
-        <Button type="submit" size="icon" aria-label="Envoyer">
-          <Send className="h-4 w-4" />
+        <Button type="submit" size="icon" aria-label="Envoyer" disabled={sending || !draft.trim()}>
+          {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </Button>
       </form>
     </div>
   );
 }
 
-function Bubble({ message, currentId }: { message: ChatMessage; currentId: CharacterId }) {
-  if (message.senderId === "system") {
+function Bubble({ message, currentId }: { message: LiveMessage; currentId: CharacterId }) {
+  const senderId = message.sender_character_id;
+
+  if (senderId === "system") {
     return (
       <div className="flex justify-center">
         <span className="font-mono text-[11px] tracking-wider uppercase text-muted-foreground bg-muted/70 rounded-full px-3 py-1">
@@ -96,7 +170,7 @@ function Bubble({ message, currentId }: { message: ChatMessage; currentId: Chara
     );
   }
 
-  if (message.senderId === "corbeau") {
+  if (senderId === "corbeau") {
     return (
       <div className="flex justify-center">
         <div className="max-w-[80%] rounded-md border border-dashed border-primary/60 bg-primary/5 px-4 py-3 shadow-paper">
@@ -111,15 +185,17 @@ function Bubble({ message, currentId }: { message: ChatMessage; currentId: Chara
     );
   }
 
-  const sender = charactersById[message.senderId];
-  const isMine = message.senderId === currentId;
+  const sender = charactersById[senderId as CharacterId];
+  const isMine = senderId === currentId;
+  const displayName = sender?.name ?? message.sender_display_name;
+  const image = sender?.image;
 
   return (
     <div className={cn("flex gap-2", isMine ? "justify-end" : "justify-start")}>
-      {!isMine && (
+      {!isMine && image && (
         <img
-          src={sender.image}
-          alt={sender.name}
+          src={image}
+          alt={displayName}
           width={64}
           height={64}
           loading="lazy"
@@ -129,7 +205,7 @@ function Bubble({ message, currentId }: { message: ChatMessage; currentId: Chara
       <div className={cn("max-w-[78%]", isMine && "items-end")}>
         {!isMine && (
           <p className="text-[11px] text-muted-foreground ml-2 mb-0.5 font-medium">
-            {sender.name}
+            {displayName}
           </p>
         )}
         <div
@@ -140,26 +216,7 @@ function Bubble({ message, currentId }: { message: ChatMessage; currentId: Chara
               : "bg-card text-foreground border border-border rounded-bl-sm",
           )}
         >
-          {message.mediaType === "image" || message.mediaType === "video" ? (
-            <div className="space-y-1.5">
-              <div
-                className={cn(
-                  "flex items-center gap-2 rounded-md p-2",
-                  isMine ? "bg-primary-foreground/10" : "bg-muted",
-                )}
-              >
-                {message.mediaType === "video" ? (
-                  <Video className="h-4 w-4 shrink-0" />
-                ) : (
-                  <ImageIcon className="h-4 w-4 shrink-0" />
-                )}
-                <span className="text-xs italic">{message.mediaCaption}</span>
-              </div>
-              <p>{message.content}</p>
-            </div>
-          ) : (
-            <p>{message.content}</p>
-          )}
+          <p>{message.content}</p>
         </div>
         <p
           className={cn(
@@ -167,7 +224,7 @@ function Bubble({ message, currentId }: { message: ChatMessage; currentId: Chara
             isMine ? "text-right mr-1" : "ml-2",
           )}
         >
-          {message.timestamp}
+          {formatTime(message.created_at)}
         </p>
       </div>
       {isMine && (

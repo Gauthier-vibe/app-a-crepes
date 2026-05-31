@@ -14,7 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          channel: string
+          content: string
+          created_at: string
+          id: string
+          sender_character_id: string
+          sender_display_name: string
+        }
+        Insert: {
+          channel: string
+          content: string
+          created_at?: string
+          id?: string
+          sender_character_id: string
+          sender_display_name: string
+        }
+        Update: {
+          channel?: string
+          content?: string
+          created_at?: string
+          id?: string
+          sender_character_id?: string
+          sender_display_name?: string
+        }
+        Relationships: []
+      }
+      game_state: {
+        Row: {
+          accused_character_id: string | null
+          current_act: number
+          id: number
+          notes: string | null
+          phase: string
+          updated_at: string
+          vote_open: boolean
+        }
+        Insert: {
+          accused_character_id?: string | null
+          current_act?: number
+          id?: number
+          notes?: string | null
+          phase?: string
+          updated_at?: string
+          vote_open?: boolean
+        }
+        Update: {
+          accused_character_id?: string | null
+          current_act?: number
+          id?: number
+          notes?: string | null
+          phase?: string
+          updated_at?: string
+          vote_open?: boolean
+        }
+        Relationships: []
+      }
+      revealed_clues: {
+        Row: {
+          clue_text: string
+          created_at: string
+          from_character_id: string
+          id: string
+          to_character_id: string
+        }
+        Insert: {
+          clue_text: string
+          created_at?: string
+          from_character_id: string
+          id?: string
+          to_character_id: string
+        }
+        Update: {
+          clue_text?: string
+          created_at?: string
+          from_character_id?: string
+          id?: string
+          to_character_id?: string
+        }
+        Relationships: []
+      }
+      timeline_events: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_type: string
+          id: string
+          payload: Json
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_type: string
+          id?: string
+          payload?: Json
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
