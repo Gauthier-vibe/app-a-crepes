@@ -265,14 +265,28 @@ function Bubble({ message, currentId }: { message: LiveMessage; currentId: Chara
         )}
         <div
           className={cn(
-            "rounded-2xl px-3.5 py-2 text-[15px] leading-snug shadow-paper",
+            "rounded-2xl text-[15px] leading-snug shadow-paper overflow-hidden",
+            message.image_url ? "p-1" : "px-3.5 py-2",
             isMine
               ? "bg-primary text-primary-foreground rounded-br-sm"
               : "bg-card text-foreground border border-border rounded-bl-sm",
           )}
         >
-          <p>{message.content}</p>
+          {message.image_url && (
+            <a href={message.image_url} target="_blank" rel="noopener noreferrer">
+              <img
+                src={message.image_url}
+                alt="Image partagée"
+                loading="lazy"
+                className="rounded-xl max-h-72 w-auto object-cover"
+              />
+            </a>
+          )}
+          {message.content && (
+            <p className={cn(message.image_url && "px-2.5 py-1.5")}>{message.content}</p>
+          )}
         </div>
+
         <p
           className={cn(
             "text-[10px] text-muted-foreground mt-0.5 font-mono",
