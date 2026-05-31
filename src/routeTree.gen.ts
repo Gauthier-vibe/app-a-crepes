@@ -9,38 +9,206 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlayerRouteImport } from './routes/player'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as GmRouteImport } from './routes/gm'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlayerIndexRouteImport } from './routes/player.index'
+import { Route as GmIndexRouteImport } from './routes/gm.index'
+import { Route as PlayerRelationsRouteImport } from './routes/player.relations'
+import { Route as PlayerNotesRouteImport } from './routes/player.notes'
+import { Route as PlayerChatRouteImport } from './routes/player.chat'
+import { Route as GmTimelineRouteImport } from './routes/gm.timeline'
+import { Route as GmChatRouteImport } from './routes/gm.chat'
+import { Route as PlayerRelationsIdRouteImport } from './routes/player.relations.$id'
+import { Route as GmPlayerIdRouteImport } from './routes/gm.player.$id'
 
+const PlayerRoute = PlayerRouteImport.update({
+  id: '/player',
+  path: '/player',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GmRoute = GmRouteImport.update({
+  id: '/gm',
+  path: '/gm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayerIndexRoute = PlayerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const GmIndexRoute = GmIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GmRoute,
+} as any)
+const PlayerRelationsRoute = PlayerRelationsRouteImport.update({
+  id: '/relations',
+  path: '/relations',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const PlayerNotesRoute = PlayerNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const PlayerChatRoute = PlayerChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const GmTimelineRoute = GmTimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => GmRoute,
+} as any)
+const GmChatRoute = GmChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => GmRoute,
+} as any)
+const PlayerRelationsIdRoute = PlayerRelationsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PlayerRelationsRoute,
+} as any)
+const GmPlayerIdRoute = GmPlayerIdRouteImport.update({
+  id: '/player/$id',
+  path: '/player/$id',
+  getParentRoute: () => GmRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gm': typeof GmRouteWithChildren
+  '/login': typeof LoginRoute
+  '/player': typeof PlayerRouteWithChildren
+  '/gm/chat': typeof GmChatRoute
+  '/gm/timeline': typeof GmTimelineRoute
+  '/player/chat': typeof PlayerChatRoute
+  '/player/notes': typeof PlayerNotesRoute
+  '/player/relations': typeof PlayerRelationsRouteWithChildren
+  '/gm/': typeof GmIndexRoute
+  '/player/': typeof PlayerIndexRoute
+  '/gm/player/$id': typeof GmPlayerIdRoute
+  '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/gm/chat': typeof GmChatRoute
+  '/gm/timeline': typeof GmTimelineRoute
+  '/player/chat': typeof PlayerChatRoute
+  '/player/notes': typeof PlayerNotesRoute
+  '/player/relations': typeof PlayerRelationsRouteWithChildren
+  '/gm': typeof GmIndexRoute
+  '/player': typeof PlayerIndexRoute
+  '/gm/player/$id': typeof GmPlayerIdRoute
+  '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gm': typeof GmRouteWithChildren
+  '/login': typeof LoginRoute
+  '/player': typeof PlayerRouteWithChildren
+  '/gm/chat': typeof GmChatRoute
+  '/gm/timeline': typeof GmTimelineRoute
+  '/player/chat': typeof PlayerChatRoute
+  '/player/notes': typeof PlayerNotesRoute
+  '/player/relations': typeof PlayerRelationsRouteWithChildren
+  '/gm/': typeof GmIndexRoute
+  '/player/': typeof PlayerIndexRoute
+  '/gm/player/$id': typeof GmPlayerIdRoute
+  '/player/relations/$id': typeof PlayerRelationsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/gm'
+    | '/login'
+    | '/player'
+    | '/gm/chat'
+    | '/gm/timeline'
+    | '/player/chat'
+    | '/player/notes'
+    | '/player/relations'
+    | '/gm/'
+    | '/player/'
+    | '/gm/player/$id'
+    | '/player/relations/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/gm/chat'
+    | '/gm/timeline'
+    | '/player/chat'
+    | '/player/notes'
+    | '/player/relations'
+    | '/gm'
+    | '/player'
+    | '/gm/player/$id'
+    | '/player/relations/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/gm'
+    | '/login'
+    | '/player'
+    | '/gm/chat'
+    | '/gm/timeline'
+    | '/player/chat'
+    | '/player/notes'
+    | '/player/relations'
+    | '/gm/'
+    | '/player/'
+    | '/gm/player/$id'
+    | '/player/relations/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GmRoute: typeof GmRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  PlayerRoute: typeof PlayerRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/player': {
+      id: '/player'
+      path: '/player'
+      fullPath: '/player'
+      preLoaderRoute: typeof PlayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gm': {
+      id: '/gm'
+      path: '/gm'
+      fullPath: '/gm'
+      preLoaderRoute: typeof GmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +216,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/player/': {
+      id: '/player/'
+      path: '/'
+      fullPath: '/player/'
+      preLoaderRoute: typeof PlayerIndexRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/gm/': {
+      id: '/gm/'
+      path: '/'
+      fullPath: '/gm/'
+      preLoaderRoute: typeof GmIndexRouteImport
+      parentRoute: typeof GmRoute
+    }
+    '/player/relations': {
+      id: '/player/relations'
+      path: '/relations'
+      fullPath: '/player/relations'
+      preLoaderRoute: typeof PlayerRelationsRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/player/notes': {
+      id: '/player/notes'
+      path: '/notes'
+      fullPath: '/player/notes'
+      preLoaderRoute: typeof PlayerNotesRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/player/chat': {
+      id: '/player/chat'
+      path: '/chat'
+      fullPath: '/player/chat'
+      preLoaderRoute: typeof PlayerChatRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/gm/timeline': {
+      id: '/gm/timeline'
+      path: '/timeline'
+      fullPath: '/gm/timeline'
+      preLoaderRoute: typeof GmTimelineRouteImport
+      parentRoute: typeof GmRoute
+    }
+    '/gm/chat': {
+      id: '/gm/chat'
+      path: '/chat'
+      fullPath: '/gm/chat'
+      preLoaderRoute: typeof GmChatRouteImport
+      parentRoute: typeof GmRoute
+    }
+    '/player/relations/$id': {
+      id: '/player/relations/$id'
+      path: '/$id'
+      fullPath: '/player/relations/$id'
+      preLoaderRoute: typeof PlayerRelationsIdRouteImport
+      parentRoute: typeof PlayerRelationsRoute
+    }
+    '/gm/player/$id': {
+      id: '/gm/player/$id'
+      path: '/player/$id'
+      fullPath: '/gm/player/$id'
+      preLoaderRoute: typeof GmPlayerIdRouteImport
+      parentRoute: typeof GmRoute
+    }
   }
 }
 
+interface GmRouteChildren {
+  GmChatRoute: typeof GmChatRoute
+  GmTimelineRoute: typeof GmTimelineRoute
+  GmIndexRoute: typeof GmIndexRoute
+  GmPlayerIdRoute: typeof GmPlayerIdRoute
+}
+
+const GmRouteChildren: GmRouteChildren = {
+  GmChatRoute: GmChatRoute,
+  GmTimelineRoute: GmTimelineRoute,
+  GmIndexRoute: GmIndexRoute,
+  GmPlayerIdRoute: GmPlayerIdRoute,
+}
+
+const GmRouteWithChildren = GmRoute._addFileChildren(GmRouteChildren)
+
+interface PlayerRelationsRouteChildren {
+  PlayerRelationsIdRoute: typeof PlayerRelationsIdRoute
+}
+
+const PlayerRelationsRouteChildren: PlayerRelationsRouteChildren = {
+  PlayerRelationsIdRoute: PlayerRelationsIdRoute,
+}
+
+const PlayerRelationsRouteWithChildren = PlayerRelationsRoute._addFileChildren(
+  PlayerRelationsRouteChildren,
+)
+
+interface PlayerRouteChildren {
+  PlayerChatRoute: typeof PlayerChatRoute
+  PlayerNotesRoute: typeof PlayerNotesRoute
+  PlayerRelationsRoute: typeof PlayerRelationsRouteWithChildren
+  PlayerIndexRoute: typeof PlayerIndexRoute
+}
+
+const PlayerRouteChildren: PlayerRouteChildren = {
+  PlayerChatRoute: PlayerChatRoute,
+  PlayerNotesRoute: PlayerNotesRoute,
+  PlayerRelationsRoute: PlayerRelationsRouteWithChildren,
+  PlayerIndexRoute: PlayerIndexRoute,
+}
+
+const PlayerRouteWithChildren =
+  PlayerRoute._addFileChildren(PlayerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GmRoute: GmRouteWithChildren,
+  LoginRoute: LoginRoute,
+  PlayerRoute: PlayerRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
