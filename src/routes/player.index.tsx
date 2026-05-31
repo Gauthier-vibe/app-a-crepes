@@ -417,23 +417,3 @@ function AccordionShell({
     </AccordionItem>
   );
 }
-
-function ObjectiveStatusBadge({ status }: { status: "pending" | "done" | "failed" }) {
-  if (status === "done")
-    return (
-      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground shrink-0">
-        <Check className="h-3 w-3" />
-      </span>
-    );
-  if (status === "failed")
-    return (
-      <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground shrink-0">
-        <X className="h-3 w-3" />
-      </span>
-    );
-  return (
-    <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted text-muted-foreground shrink-0">
-      <Clock className="h-3 w-3" />
-    </span>
-  );
-}
