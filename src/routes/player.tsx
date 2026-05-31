@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
-import { useEffect } from "react";
+import { Crown, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/player/BottomNav";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
