@@ -42,6 +42,9 @@ function LoginPage() {
       return;
     }
     setUnlocking(true);
+    if (character.isGameMaster) {
+      localStorage.setItem("mp:is-gm", "1");
+    }
     setTimeout(() => {
       setCharacter(character.id);
       navigate({ to: "/player" });
