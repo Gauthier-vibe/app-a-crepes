@@ -21,14 +21,15 @@ export const Route = createFileRoute("/gm/")({
 });
 
 function GmDashboard() {
-  const [cluesUnlocked, setCluesUnlocked] = useState<Record<string, number>>({});
+  const [cluesUnlocked] = useState<Record<string, number>>({});
   const { byId, upsert } = useCharacterClues();
+  const { setCharacter } = useCurrentCharacter();
+  const navigate = useNavigate();
 
-  const sendClue = (id: string, name: string) => {
-    setCluesUnlocked((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
-    toast.success(`Indice envoyé à ${name}`, {
-      description: "Le joueur a reçu une notification.",
-    });
+  const loginAs = (id: CharacterId, name: string) => {
+    setCharacter(id);
+    toast.success(`Connecté en tant que ${name}`);
+    navigate({ to: "/player" });
   };
 
   const assignHolder = async (charId: CharacterId, holderId: string) => {
