@@ -12,10 +12,17 @@ export const Route = createFileRoute("/player")({
 function PlayerLayout() {
   const { character, loading, setCharacter } = useCurrentCharacter();
   const navigate = useNavigate();
+  const [isGm, setIsGm] = useState(false);
 
   useEffect(() => {
     if (!loading && !character) navigate({ to: "/login" });
   }, [loading, character, navigate]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsGm(localStorage.getItem("mp:is-gm") === "1");
+    }
+  }, []);
 
   if (loading || !character) {
     return (
