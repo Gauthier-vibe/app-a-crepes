@@ -115,36 +115,6 @@ function LoginPage() {
           </div>
         </form>
 
-        <details className="mt-6 text-xs text-muted-foreground">
-          <summary className="cursor-pointer text-center hover:text-foreground transition-colors">
-            Codes de démo (joueurs)
-          </summary>
-          <div className="mt-3 grid grid-cols-1 gap-1.5 font-mono text-[11px]">
-            {([
-              ["MARIEE-001", "Agathe — Enquêtrice"],
-              ["MARIE-002", "Lucas — Enquêteur"],
-              ["PARRAIN-003", "Arthur"],
-              ["MARRAINE-004", "Eugénie"],
-              ["PAPY-005", "Papy Hervé"],
-              ["TONTON-006", "Gauthier"],
-              ["PHOTO-007", "Julie"],
-              ["PAPA-008", "Antoine"],
-              ["MAMAN-009", "Lénaïc"],
-              ["TONTON-010", "Léopold"],
-              ["MAMIE-011", "Mamie Christelle"],
-              ["MEDIUM-012", "Claire"],
-              ["CORBEAU-013", "Victorine"],
-            ] as const).map(([c, label]) => (
-              <div key={c} className="flex items-center justify-between gap-2 px-2 py-1 bg-muted rounded">
-                <code>{c}</code>
-                <span className="text-muted-foreground not-italic">{label}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-3 text-center text-[10px] text-muted-foreground/80 italic">
-            Le code organisateur est transmis en privé à l'animateur.
-          </p>
-        </details>
 
       </div>
     </main>
