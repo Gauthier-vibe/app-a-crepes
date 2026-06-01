@@ -314,6 +314,27 @@ function FichePage() {
           label="Pistes des indices"
           tone="primary"
         >
+          {hasKeyClue && (
+            <div className="mb-4 rounded-md border border-gold/50 bg-gold/5 p-3 space-y-2">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                Ton indice secret (phrase clé)
+              </p>
+              <p className="text-[11px] text-muted-foreground italic">
+                Indice à livrer si on évoque ton anecdote.
+              </p>
+              <Textarea
+                value={clue}
+                onChange={(e) => setClue(e.target.value)}
+                placeholder="Ex. : « J'ai vu quelqu'un sortir de la cuisine à 22h. »"
+                rows={3}
+                className="text-sm"
+              />
+              <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
+                <Save className="h-4 w-4 mr-1.5" />
+                {saving ? "Enregistrement…" : "Enregistrer indice"}
+              </Button>
+            </div>
+          )}
           {(() => {
             const heldClues = rows.filter(
               (r) => r.holder_character_id === character.id,
@@ -354,6 +375,7 @@ function FichePage() {
               </ul>
             );
           })()}
+
         </AccordionShell>
 
 
