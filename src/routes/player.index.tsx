@@ -311,7 +311,7 @@ function FichePage() {
         <AccordionShell
           value="key-phrase"
           icon={KeyRound}
-          label="Indice à transmettre"
+          label="Pistes des indices"
           tone="primary"
         >
           <div className="space-y-3">
