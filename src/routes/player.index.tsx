@@ -54,7 +54,7 @@ export const Route = createFileRoute("/player/")({
 function FichePage() {
   const { character } = useCurrentCharacter();
   const { isRevealed, reveal, unreveal } = useRevealedClues();
-  const { byId, upsert } = useCharacterClues();
+  const { byId, upsert, rows } = useCharacterClues();
   const [openSecret, setOpenSecret] = useState<Secret | null>(null);
   const [phrase, setPhrase] = useState("");
   const [clue, setClue] = useState("");
