@@ -242,7 +242,7 @@ function FichePage() {
                   INDICE SECRET
                 </p>
                 <p className="text-xs text-muted-foreground italic">
-                  À livrer uniquement si on évoque ton anecdote clé.
+                  À livrer uniquement si les enquêteurs ont trouvé ton anecdote clé.
                 </p>
                 <p className="text-sm text-foreground">{character.mainClue}</p>
                 <p className="mt-2 text-xs text-muted-foreground italic">
@@ -317,15 +317,15 @@ function FichePage() {
           {hasKeyClue && (
             <div className="mb-4 rounded-md border border-gold/50 bg-gold/5 p-3 space-y-2">
               <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Ton indice secret (phrase clé)
+                Ta piste pour ton anecdote clé
               </p>
               <p className="text-[11px] text-muted-foreground italic">
-                Indice à livrer si on évoque ton anecdote.
+                indices sur ton anecdote clé. Ces éléments seront transmis aux enquêteurs par un autre joueur.
               </p>
               <Textarea
                 value={clue}
                 onChange={(e) => setClue(e.target.value)}
-                placeholder="Ex. : « J'ai vu quelqu'un sortir de la cuisine à 22h. »"
+                placeholder="Ex. : « dis aux enquêteurs de me parler de voyage »"
                 rows={3}
                 className="text-sm"
               />
