@@ -231,10 +231,6 @@ function FichePage() {
                   rows={3}
                   className="text-sm italic"
                 />
-                <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
-                  <Save className="h-4 w-4 mr-1.5" />
-                  {saving ? "Enregistrement…" : "Enregistrer anecdote"}
-                </Button>
               </div>
 
               <div className="mt-3 rounded-md border border-border bg-background/70 p-3 space-y-2">
@@ -244,7 +240,17 @@ function FichePage() {
                 <p className="text-xs text-muted-foreground italic">
                   À livrer uniquement si on évoque ton anecdote clé.
                 </p>
-                <p className="text-sm text-foreground">{character.mainClue}</p>
+                <Textarea
+                  value={clue}
+                  onChange={(e) => setClue(e.target.value)}
+                  placeholder="L'indice à transmettre quand on évoque ton anecdote."
+                  rows={3}
+                  className="text-sm"
+                />
+                <Button size="sm" variant="outline" onClick={savePhrase} disabled={saving}>
+                  <Save className="h-4 w-4 mr-1.5" />
+                  {saving ? "Enregistrement…" : "Enregistrer anecdote et indice"}
+                </Button>
                 <p className="mt-2 text-xs text-muted-foreground italic">
                   {clueRevealed
                     ? "Indice livré aux enquêteurs."
