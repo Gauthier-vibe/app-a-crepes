@@ -4,28 +4,30 @@ import type { ComponentType, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { isBetaTester } from "@/lib/beta";
+import { useFeatureFlags } from "@/hooks/useFeatureFlags";
 
 type NavItem = {
   to: "/player" | "/player/relations" | "/player/chat" | "/player/role" | "/player/help";
   label: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   match: (path: string) => boolean;
-  beta?: boolean;
+  featureKey?: string;
 };
 
 export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { character } = useCurrentCharacter();
   const beta = isBetaTester(character?.id);
+  const { isBetaOnly } = useFeatureFlags();
 
   const allItems: NavItem[] = [
     { to: "/player", label: "Fiche", icon: BookOpen, match: (p) => p === "/player" || p === "/player/" },
-    { to: "/player/relations", label: "Relations", icon: Users, match: (p) => p.startsWith("/player/relations"), beta: true },
+    { to: "/player/relations", label: "Relations", icon: Users, match: (p) => p.startsWith("/player/relations"), featureKey: "relations" },
     { to: "/player/chat", label: "Chat", icon: MessageCircle, match: (p) => p.startsWith("/player/chat") },
-    { to: "/player/role", label: "Rôle", icon: VenetianMask, match: (p) => p.startsWith("/player/role"), beta: true },
+    { to: "/player/role", label: "Rôle", icon: VenetianMask, match: (p) => p.startsWith("/player/role"), featureKey: "role" },
     { to: "/player/help", label: "Help", icon: LifeBuoy, match: (p) => p.startsWith("/player/help") },
   ];
-  const items = allItems.filter((i) => !i.beta || beta);
+  const items = allItems.filter((i) => !i.featureKey || beta || !isBetaOnly(i.featureKey));
 
   return (
     <nav
