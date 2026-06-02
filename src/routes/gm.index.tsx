@@ -26,6 +26,7 @@ export const Route = createFileRoute("/gm/")({
 function GmDashboard() {
   const [cluesUnlocked] = useState<Record<string, number>>({});
   const { byId, upsert } = useCharacterClues();
+  const { byId: settingsById, upsert: upsertSettings } = useCharacterSettings();
   const { setCharacter } = useCurrentCharacter();
   const navigate = useNavigate();
 
@@ -39,6 +40,18 @@ function GmDashboard() {
     await upsert(charId, { holder_character_id: holderId === "__none" ? null : holderId });
     toast.success("Porteur d'indice mis à jour");
   };
+
+  const setHiddenRole = async (charId: CharacterId, key: string) => {
+    await upsertSettings(charId, { hidden_role_key: key === "default" ? null : key });
+    toast.success("Rôle caché mis à jour");
+  };
+
+  const setBeta = async (charId: CharacterId, value: boolean) => {
+    await upsertSettings(charId, { is_beta_tester: value });
+    toast.success(value ? "Marqué comme bêta-testeur" : "Retiré des bêta-testeurs");
+  };
+
+
 
 
   return (
