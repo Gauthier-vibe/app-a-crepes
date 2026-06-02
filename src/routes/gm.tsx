@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut, PanelLeftOpen, PanelLeftClose, User, UserCog } from "lucide-react";
+import { Crown, LayoutDashboard, MessageCircle, ListChecks, LifeBuoy, LogOut, PanelLeftOpen, PanelLeftClose, User, UserCog, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
