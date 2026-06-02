@@ -22,6 +22,7 @@ import { Route as PlayerHelpRouteImport } from './routes/player.help'
 import { Route as PlayerChatRouteImport } from './routes/player.chat'
 import { Route as GmTimelineRouteImport } from './routes/gm.timeline'
 import { Route as GmHelpRouteImport } from './routes/gm.help'
+import { Route as GmFeaturesRouteImport } from './routes/gm.features'
 import { Route as GmChatRouteImport } from './routes/gm.chat'
 import { Route as PlayerRelationsIdRouteImport } from './routes/player.relations.$id'
 import { Route as GmPlayerIdRouteImport } from './routes/gm.player.$id'
@@ -91,6 +92,11 @@ const GmHelpRoute = GmHelpRouteImport.update({
   path: '/help',
   getParentRoute: () => GmRoute,
 } as any)
+const GmFeaturesRoute = GmFeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => GmRoute,
+} as any)
 const GmChatRoute = GmChatRouteImport.update({
   id: '/chat',
   path: '/chat',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/player': typeof PlayerRouteWithChildren
   '/gm/chat': typeof GmChatRoute
+  '/gm/features': typeof GmFeaturesRoute
   '/gm/help': typeof GmHelpRoute
   '/gm/timeline': typeof GmTimelineRoute
   '/player/chat': typeof PlayerChatRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/gm/chat': typeof GmChatRoute
+  '/gm/features': typeof GmFeaturesRoute
   '/gm/help': typeof GmHelpRoute
   '/gm/timeline': typeof GmTimelineRoute
   '/player/chat': typeof PlayerChatRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/player': typeof PlayerRouteWithChildren
   '/gm/chat': typeof GmChatRoute
+  '/gm/features': typeof GmFeaturesRoute
   '/gm/help': typeof GmHelpRoute
   '/gm/timeline': typeof GmTimelineRoute
   '/player/chat': typeof PlayerChatRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/player'
     | '/gm/chat'
+    | '/gm/features'
     | '/gm/help'
     | '/gm/timeline'
     | '/player/chat'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/gm/chat'
+    | '/gm/features'
     | '/gm/help'
     | '/gm/timeline'
     | '/player/chat'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/player'
     | '/gm/chat'
+    | '/gm/features'
     | '/gm/help'
     | '/gm/timeline'
     | '/player/chat'
@@ -315,6 +327,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GmHelpRouteImport
       parentRoute: typeof GmRoute
     }
+    '/gm/features': {
+      id: '/gm/features'
+      path: '/features'
+      fullPath: '/gm/features'
+      preLoaderRoute: typeof GmFeaturesRouteImport
+      parentRoute: typeof GmRoute
+    }
     '/gm/chat': {
       id: '/gm/chat'
       path: '/chat'
@@ -341,6 +360,7 @@ declare module '@tanstack/react-router' {
 
 interface GmRouteChildren {
   GmChatRoute: typeof GmChatRoute
+  GmFeaturesRoute: typeof GmFeaturesRoute
   GmHelpRoute: typeof GmHelpRoute
   GmTimelineRoute: typeof GmTimelineRoute
   GmIndexRoute: typeof GmIndexRoute
@@ -349,6 +369,7 @@ interface GmRouteChildren {
 
 const GmRouteChildren: GmRouteChildren = {
   GmChatRoute: GmChatRoute,
+  GmFeaturesRoute: GmFeaturesRoute,
   GmHelpRoute: GmHelpRoute,
   GmTimelineRoute: GmTimelineRoute,
   GmIndexRoute: GmIndexRoute,

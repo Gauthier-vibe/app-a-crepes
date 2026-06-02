@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { KillerGameCard } from "@/components/player/KillerGameCard";
 import { isBetaTester } from "@/lib/beta";
+import { useFeatureFlags } from "@/hooks/useFeatureFlags";
 
 export const Route = createFileRoute("/player/relations")({
   head: () => ({ meta: [{ title: "Relations — Murder Party" }] }),
@@ -19,9 +20,10 @@ function RelationsPage() {
   const { character } = useCurrentCharacter();
   const { isRevealed } = useRevealedClues();
   const { rows, upsert } = useCharacterClues();
+  const { isBetaOnly } = useFeatureFlags();
   if (!character) return null;
 
-  if (!isBetaTester(character.id)) {
+  if (isBetaOnly("relations") && !isBetaTester(character.id)) {
     return (
       <div className="px-4 pt-10 pb-10 max-w-md mx-auto text-center">
         <div className="mx-auto mb-4 h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
