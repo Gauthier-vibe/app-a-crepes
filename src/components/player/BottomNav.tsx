@@ -3,7 +3,7 @@ import { BookOpen, Users, MessageCircle, VenetianMask, LifeBuoy } from "lucide-r
 import type { ComponentType, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
-import { isBetaTester } from "@/lib/beta";
+import { useIsBetaTester } from "@/lib/beta";
 import { useFeatureFlags } from "@/hooks/useFeatureFlags";
 
 type NavItem = {
@@ -17,7 +17,7 @@ type NavItem = {
 export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { character } = useCurrentCharacter();
-  const beta = isBetaTester(character?.id);
+  const beta = useIsBetaTester(character?.id);
   const { isBetaOnly } = useFeatureFlags();
 
   const allItems: NavItem[] = [

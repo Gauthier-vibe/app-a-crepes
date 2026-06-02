@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, UserCog, MessageSquareQuote } from "lucide-react";
+import { Eye, Sparkles, UserCog, MessageSquareQuote, VenetianMask, FlaskConical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import { characters, type CharacterId } from "@/data/mock";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
+import { useCharacterSettings } from "@/hooks/useCharacterSettings";
+import { HIDDEN_ROLE_OPTIONS } from "@/lib/hiddenRoles";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { toast } from "sonner";
 
@@ -23,6 +26,7 @@ export const Route = createFileRoute("/gm/")({
 function GmDashboard() {
   const [cluesUnlocked] = useState<Record<string, number>>({});
   const { byId, upsert } = useCharacterClues();
+  const { byId: settingsById, upsert: upsertSettings } = useCharacterSettings();
   const { setCharacter } = useCurrentCharacter();
   const navigate = useNavigate();
 
@@ -36,6 +40,18 @@ function GmDashboard() {
     await upsert(charId, { holder_character_id: holderId === "__none" ? null : holderId });
     toast.success("Porteur d'indice mis à jour");
   };
+
+  const setHiddenRole = async (charId: CharacterId, key: string) => {
+    await upsertSettings(charId, { hidden_role_key: key === "default" ? null : key });
+    toast.success("Rôle caché mis à jour");
+  };
+
+  const setBeta = async (charId: CharacterId, value: boolean) => {
+    await upsertSettings(charId, { is_beta_tester: value });
+    toast.success(value ? "Marqué comme bêta-testeur" : "Retiré des bêta-testeurs");
+  };
+
+
 
 
   return (
@@ -61,6 +77,7 @@ function GmDashboard() {
       <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {characters.map((c) => {
           const row = byId(c.id);
+          const settings = settingsById(c.id);
           return (
             <li
               key={c.id}
@@ -127,6 +144,45 @@ function GmDashboard() {
                   </Select>
                 </div>
               )}
+              <div className="mt-3 rounded-md border border-border bg-background/40 p-2.5">
+                <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1">
+                  <VenetianMask className="h-3 w-3" />
+                  Rôle caché
+                </p>
+                <Select
+                  value={settings?.hidden_role_key ?? "default"}
+                  onValueChange={(v) => setHiddenRole(c.id, v)}
+                >
+                  <SelectTrigger className="h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {HIDDEN_ROLE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.key} value={opt.key}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="mt-3 rounded-md border border-border bg-background/40 p-2.5 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-1">
+                    <FlaskConical className="h-3 w-3" />
+                    Bêta-testeur
+                  </p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Accès aux fonctionnalités en mode bêta.
+                  </p>
+                </div>
+                <Switch
+                  checked={settings?.is_beta_tester ?? false}
+                  onCheckedChange={(v) => setBeta(c.id, v)}
+                  aria-label={`Bêta-testeur pour ${c.name}`}
+                />
+              </div>
+
 
               <div className="mt-3 flex gap-2">
                 <Button
