@@ -71,6 +71,27 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flags: {
+        Row: {
+          beta_only: boolean
+          feature_key: string
+          label: string
+          updated_at: string
+        }
+        Insert: {
+          beta_only?: boolean
+          feature_key: string
+          label: string
+          updated_at?: string
+        }
+        Update: {
+          beta_only?: boolean
+          feature_key?: string
+          label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       game_state: {
         Row: {
           accused_character_id: string | null
