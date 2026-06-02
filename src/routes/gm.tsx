@@ -51,6 +51,7 @@ function GmLayout() {
     { to: "/gm", label: "Vue d'ensemble", icon: LayoutDashboard, match: pathname === "/gm" },
     { to: "/gm/timeline", label: "Scénario", icon: ListChecks, match: pathname.startsWith("/gm/timeline") },
     { to: "/gm/chat", label: "Chat & indices", icon: MessageCircle, match: pathname.startsWith("/gm/chat") },
+    { to: "/gm/features", label: "Fonctionnalités", icon: FlaskConical, match: pathname.startsWith("/gm/features") },
     { to: "/gm/help", label: "Boîte d'aide", icon: LifeBuoy, match: pathname.startsWith("/gm/help") },
   ] as const;
 
