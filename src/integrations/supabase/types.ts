@@ -41,6 +41,27 @@ export type Database = {
         }
         Relationships: []
       }
+      character_settings: {
+        Row: {
+          character_id: string
+          hidden_role_key: string | null
+          is_beta_tester: boolean
+          updated_at: string
+        }
+        Insert: {
+          character_id: string
+          hidden_role_key?: string | null
+          is_beta_tester?: boolean
+          updated_at?: string
+        }
+        Update: {
+          character_id?: string
+          hidden_role_key?: string | null
+          is_beta_tester?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           channel: string
