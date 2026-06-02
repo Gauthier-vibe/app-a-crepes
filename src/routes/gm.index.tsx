@@ -144,6 +144,45 @@ function GmDashboard() {
                   </Select>
                 </div>
               )}
+              <div className="mt-3 rounded-md border border-border bg-background/40 p-2.5">
+                <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1">
+                  <VenetianMask className="h-3 w-3" />
+                  Rôle caché
+                </p>
+                <Select
+                  value={settings?.hidden_role_key ?? "default"}
+                  onValueChange={(v) => setHiddenRole(c.id, v)}
+                >
+                  <SelectTrigger className="h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {HIDDEN_ROLE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.key} value={opt.key}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="mt-3 rounded-md border border-border bg-background/40 p-2.5 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-1">
+                    <FlaskConical className="h-3 w-3" />
+                    Bêta-testeur
+                  </p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Accès aux fonctionnalités en mode bêta.
+                  </p>
+                </div>
+                <Switch
+                  checked={settings?.is_beta_tester ?? false}
+                  onCheckedChange={(v) => setBeta(c.id, v)}
+                  aria-label={`Bêta-testeur pour ${c.name}`}
+                />
+              </div>
+
 
               <div className="mt-3 flex gap-2">
                 <Button
