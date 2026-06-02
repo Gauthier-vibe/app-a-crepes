@@ -77,6 +77,7 @@ function GmDashboard() {
       <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {characters.map((c) => {
           const row = byId(c.id);
+          const settings = settingsById(c.id);
           return (
             <li
               key={c.id}
