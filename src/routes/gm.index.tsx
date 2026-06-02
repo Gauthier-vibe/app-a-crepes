@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, Sparkles, UserCog, MessageSquareQuote } from "lucide-react";
+import { Eye, Sparkles, UserCog, MessageSquareQuote, VenetianMask, FlaskConical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import { characters, type CharacterId } from "@/data/mock";
 import { useCharacterClues } from "@/hooks/useCharacterClues";
+import { useCharacterSettings } from "@/hooks/useCharacterSettings";
+import { HIDDEN_ROLE_OPTIONS } from "@/lib/hiddenRoles";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
 import { toast } from "sonner";
 
