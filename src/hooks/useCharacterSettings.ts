@@ -108,5 +108,3 @@ export function useCharacterSettings() {
   return { rows: snap.rows, loading: snap.loading, byId, upsert };
 }
 
-// Suppress unused warning if channel never referenced
-export { channel as __channel };
