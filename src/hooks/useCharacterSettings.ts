@@ -14,7 +14,7 @@ type State = { rows: CharacterSettingsRow[]; loading: boolean };
 let state: State = { rows: [], loading: true };
 const listeners = new Set<() => void>();
 let started = false;
-let channel: ReturnType<typeof supabase.channel> | null = null;
+
 
 function setState(next: State) {
   state = next;
