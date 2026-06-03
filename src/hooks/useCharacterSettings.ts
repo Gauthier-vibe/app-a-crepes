@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { CharacterId } from "@/data/mock";
 
@@ -9,51 +9,77 @@ export interface CharacterSettingsRow {
   updated_at: string;
 }
 
-export function useCharacterSettings() {
-  const [rows, setRows] = useState<CharacterSettingsRow[]>([]);
-  const [loading, setLoading] = useState(true);
+type State = { rows: CharacterSettingsRow[]; loading: boolean };
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase.from("character_settings").select("*");
-      if (!cancelled) {
-        setRows((data ?? []) as CharacterSettingsRow[]);
-        setLoading(false);
-      }
-    })();
+let state: State = { rows: [], loading: true };
+const listeners = new Set<() => void>();
+let started = false;
+let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    const channel = supabase
-      .channel("character_settings:all")
+function setState(next: State) {
+  state = next;
+  listeners.forEach((l) => l());
+}
+
+function start() {
+  if (started) return;
+  started = true;
+  (async () => {
+    const { data, error } = await supabase.from("character_settings").select("*");
+    if (error) console.error("[useCharacterSettings] fetch error", error);
+    setState({ rows: (data ?? []) as CharacterSettingsRow[], loading: false });
+  })();
+
+  try {
+    channel = supabase
+      .channel("character_settings:shared")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "character_settings" },
         (payload) => {
-          setRows((prev) => {
-            if (payload.eventType === "DELETE") {
-              const old = payload.old as CharacterSettingsRow;
-              return prev.filter((r) => r.character_id !== old.character_id);
+          const prev = state.rows;
+          let next = prev;
+          if (payload.eventType === "DELETE") {
+            const old = payload.old as CharacterSettingsRow;
+            next = prev.filter((r) => r.character_id !== old.character_id);
+          } else {
+            const row = payload.new as CharacterSettingsRow;
+            const idx = prev.findIndex((r) => r.character_id === row.character_id);
+            if (idx === -1) next = [...prev, row];
+            else {
+              next = [...prev];
+              next[idx] = row;
             }
-            const next = payload.new as CharacterSettingsRow;
-            const idx = prev.findIndex((r) => r.character_id === next.character_id);
-            if (idx === -1) return [...prev, next];
-            const copy = [...prev];
-            copy[idx] = next;
-            return copy;
-          });
+          }
+          setState({ ...state, rows: next });
         },
       )
       .subscribe();
+  } catch (err) {
+    console.error("[useCharacterSettings] channel error", err);
+  }
+}
 
-    return () => {
-      cancelled = true;
-      supabase.removeChannel(channel);
-    };
+function subscribe(cb: () => void) {
+  listeners.add(cb);
+  return () => {
+    listeners.delete(cb);
+  };
+}
+
+function getSnapshot() {
+  return state;
+}
+
+export function useCharacterSettings() {
+  useEffect(() => {
+    start();
   }, []);
+  const snap = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   const byId = useCallback(
-    (id: CharacterId) => rows.find((r) => r.character_id === id) ?? null,
-    [rows],
+    (id: CharacterId) => snap.rows.find((r) => r.character_id === id) ?? null,
+    [snap.rows],
   );
 
   const upsert = useCallback(
@@ -61,7 +87,7 @@ export function useCharacterSettings() {
       id: CharacterId,
       patch: Partial<Omit<CharacterSettingsRow, "character_id" | "updated_at">>,
     ) => {
-      const existing = rows.find((r) => r.character_id === id);
+      const existing = snap.rows.find((r) => r.character_id === id);
       const merged = {
         character_id: id,
         hidden_role_key:
@@ -71,12 +97,16 @@ export function useCharacterSettings() {
         is_beta_tester: patch.is_beta_tester ?? existing?.is_beta_tester ?? false,
         updated_at: new Date().toISOString(),
       };
-      await supabase
+      const { error } = await supabase
         .from("character_settings")
         .upsert(merged, { onConflict: "character_id" });
+      if (error) console.error("[useCharacterSettings] upsert error", error);
     },
-    [rows],
+    [snap.rows],
   );
 
-  return { rows, loading, byId, upsert };
+  return { rows: snap.rows, loading: snap.loading, byId, upsert };
 }
+
+// Suppress unused warning if channel never referenced
+export { channel as __channel };
