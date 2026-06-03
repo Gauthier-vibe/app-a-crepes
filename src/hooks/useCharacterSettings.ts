@@ -31,7 +31,7 @@ function start() {
   })();
 
   try {
-    channel = supabase
+    supabase
       .channel("character_settings:shared")
       .on(
         "postgres_changes",
