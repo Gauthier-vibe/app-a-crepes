@@ -1,44 +1,26 @@
-## Constat
+## Problème
 
-D'après ton message tu vois l'écran « This page didn't load — Something went wrong on our end » sur `/player/role` et `/player/relations`, **même quand le flag bêta est désactivé**.
+`src/routes/gm.chat.tsx` utilise un tableau mock (`messages as seed` depuis `@/data/mock`) et ne lit / n'écrit jamais dans la table `chat_messages`. Du coup la console d'administration affiche un faux fil et les messages réels postés par les joueurs (via `/player/chat` sur le canal `global`) n'apparaissent pas.
 
-J'ai vérifié les requêtes réseau et la base : les flags `role` et `relations` sont bien à `beta_only = false`, et `character_settings` répond 200. Donc côté données tout va bien — le problème vient du rendu de la page.
+## Correctif
 
-Je n'ai pas encore l'erreur exacte (les logs serveur et la console sont vides). Pour la trouver et la corriger en une passe, voici ce que je propose :
+Réécrire `src/routes/gm.chat.tsx` sur le même modèle que `src/routes/player/chat.tsx` :
 
-## Étape 1 — Capter l'erreur côté navigateur
+1. **Lecture initiale** : `supabase.from("chat_messages").select("*").eq("channel","global").order("created_at").limit(500)`.
+2. **Realtime** : abonnement `postgres_changes` INSERT sur `chat_messages` filtré `channel=eq.global`, ajout déduppé dans le state.
+3. **Rendu** : réutiliser le style existant (bulles `system`, `corbeau`, joueurs avec avatar via `charactersById`, fallback `sender_display_name`), prise en charge des images (`image_url`) comme dans le chat joueur.
+4. **Publication du Corbeau** : le formulaire insère désormais dans `chat_messages` avec `channel:"global"`, `sender_character_id:"corbeau"`, `sender_display_name:"Le Corbeau"`, `content:value` (au lieu de muter le state local).
+5. **Annonce système** : bouton "Diffuser une annonce" → insert avec `sender_character_id:"system"`, `sender_display_name:"Système"`, `content:"🔔 …"`.
+6. Loader d'attente et message vide ("Aucun message pour l'instant"), scroll auto en bas à chaque nouveau message.
 
-Pour l'instant l'erreur est invisible (pas de log JS, pas de stack). Je vais ajouter, **temporairement**, un `console.error` à chaque point d'entrée critique :
+Aucune migration nécessaire : la table `chat_messages` et ses policies publiques existent déjà, et `/player/chat` envoie déjà sur le canal `global`.
 
-- `useCharacterSettings()` (fetch + canal realtime)
-- `useFeatureFlags()` (fetch + canal realtime)
-- `useIsBetaTester()` (lecture override)
+## Fichiers touchés
 
-Ça fait apparaître l'erreur dans la console du navigateur dès que tu rouvres la page, et je pourrai la lire au tour suivant.
+- `src/routes/gm.chat.tsx` (réécriture)
 
-## Étape 2 — Hypothèses probables et corrections préventives
+## Vérification
 
-Vu le code, deux causes très probables :
-
-**A. Tableau vide pendant le tout premier rendu.**
-`useFeatureFlags` fait `beta_only ?? true` par défaut. Tant que le fetch n'a pas répondu, l'app considère la feature « bêta uniquement », ce qui peut faire flasher le mur bêta ou, combiné à un autre hook, déclencher une erreur. Je passerai le défaut à `false` **et** j'attendrai explicitement `loading` avant de décider du blocage.
-
-**B. Double abonnement realtime au même channel.**
-`useIsBetaTester` (appelé dans `BottomNav`, `player.relations`, `player.role`) instancie `useCharacterSettings()` à chaque fois → plusieurs `supabase.channel("character_settings:all")` en parallèle dans la même page. Supabase n'aime pas, ça peut throw au démontage. Je vais :
-- Soit donner un nom de canal unique par instance (`character_settings:${useId()}`)
-- Soit, mieux, mutualiser `useCharacterSettings` derrière un petit store (un seul fetch + un seul canal partagé pour toute l'app), et faire pareil pour `useFeatureFlags`.
-
-Je prends l'option store partagé — c'est plus propre et ça supprime aussi les requêtes réseau en double que je vois dans les logs (chaque hook refait son `select *`).
-
-## Étape 3 — Vérification
-
-- Recharger `/player/role` puis `/player/relations` côté joueur non bêta-testeur → le contenu réel doit s'afficher (pas de mur, pas d'erreur).
-- Toggler le flag dans `/gm/features` → la page bascule en temps réel sur le mur bêta pour un joueur non bêta-testeur, et reste accessible pour un bêta-testeur.
-- Retirer les `console.error` temporaires de l'étape 1 une fois le bug confirmé corrigé.
-
-## Fichiers concernés
-
-- `src/hooks/useCharacterSettings.ts` — store partagé + log temporaire
-- `src/hooks/useFeatureFlags.ts` — store partagé + défaut `false` après chargement + log temporaire
-- `src/lib/beta.ts` — `useIsBetaTester` lit le store partagé
-- Aucune modif visuelle sur `player.role.tsx` / `player.relations.tsx` / `BottomNav.tsx`
+- Ouvrir `/gm/chat` : les messages déjà postés par les joueurs sur le salon commun apparaissent ; un nouveau message envoyé depuis `/player/chat` s'affiche en direct.
+- Publier un message du Corbeau depuis le GM → il apparaît côté joueur instantanément.
+- Diffuser une annonce → bulle système visible des deux côtés.
