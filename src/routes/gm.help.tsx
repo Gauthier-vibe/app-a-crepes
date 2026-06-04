@@ -1,12 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LifeBuoy, Loader2, Send } from "lucide-react";
+import { HelpCircle, LifeBuoy, Loader2, Send, ShieldQuestion } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { charactersById, type CharacterId } from "@/data/mock";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+const SQUAD_CHANNEL = "squad:investigators";
+const QUESTION_PREFIX = "[Q] ";
+const MAX_QUESTIONS = 3;
+type Selected = CharacterId | "squad" | null;
 
 export const Route = createFileRoute("/gm/help")({
   head: () => ({ meta: [{ title: "Boîte d'aide — Game Master" }] }),
@@ -29,19 +34,19 @@ function formatTime(iso: string) {
 function GmHelpPage() {
   const [messages, setMessages] = useState<LiveMessage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<CharacterId | null>(null);
+  const [selected, setSelected] = useState<Selected>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Load all help:* messages + subscribe
+  // Load all help:* and squad messages + subscribe
   useEffect(() => {
     let mounted = true;
     (async () => {
       const { data, error } = await supabase
         .from("chat_messages")
         .select("*")
-        .like("channel", "help:%")
+        .or(`channel.like.help:%,channel.eq.${SQUAD_CHANNEL}`)
         .order("created_at", { ascending: true })
         .limit(2000);
       if (!mounted) return;
@@ -57,7 +62,7 @@ function GmHelpPage() {
         { event: "INSERT", schema: "public", table: "chat_messages" },
         (payload) => {
           const next = payload.new as LiveMessage;
-          if (!next.channel?.startsWith("help:")) return;
+          if (!next.channel?.startsWith("help:") && next.channel !== SQUAD_CHANNEL) return;
           setMessages((m) => (m.some((x) => x.id === next.id) ? m : [...m, next]));
         },
       )
@@ -69,9 +74,20 @@ function GmHelpPage() {
     };
   }, []);
 
+  const squadInfo = useMemo(() => {
+    const squadMessages = messages.filter((m) => m.channel === SQUAD_CHANNEL);
+    const last = squadMessages[squadMessages.length - 1];
+    const questionsUsed = squadMessages.filter((m) => {
+      const sender = charactersById[m.sender_character_id as CharacterId];
+      return sender?.isInvestigator && m.content.startsWith(QUESTION_PREFIX);
+    }).length;
+    return { count: squadMessages.length, last, questionsUsed };
+  }, [messages]);
+
   const threads = useMemo(() => {
     const map = new Map<CharacterId, { last: LiveMessage; count: number }>();
     for (const m of messages) {
+      if (!m.channel.startsWith("help:")) continue;
       const id = m.channel.replace("help:", "") as CharacterId;
       if (!charactersById[id]) continue;
       const cur = map.get(id);
@@ -86,10 +102,11 @@ function GmHelpPage() {
       .sort((a, b) => +new Date(b.last.created_at) - +new Date(a.last.created_at));
   }, [messages]);
 
-  const threadMessages = useMemo(
-    () => (selected ? messages.filter((m) => m.channel === `help:${selected}`) : []),
-    [messages, selected],
-  );
+  const threadMessages = useMemo(() => {
+    if (!selected) return [];
+    const channel = selected === "squad" ? SQUAD_CHANNEL : `help:${selected}`;
+    return messages.filter((m) => m.channel === channel);
+  }, [messages, selected]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -102,10 +119,11 @@ function GmHelpPage() {
     if (!value || sending) return;
     setSending(true);
     setDraft("");
+    const isSquad = selected === "squad";
     const { error } = await supabase.from("chat_messages").insert({
-      channel: `help:${selected}`,
+      channel: isSquad ? SQUAD_CHANNEL : `help:${selected}`,
       sender_character_id: "gm",
-      sender_display_name: "Organisation",
+      sender_display_name: isSquad ? "Commissaire" : "Organisation",
       content: value,
     });
     if (error) {
@@ -139,6 +157,33 @@ function GmHelpPage() {
             </p>
           ) : (
             <ul className="space-y-1">
+              {/* Squad thread (always shown at top) */}
+              <li>
+                <button
+                  onClick={() => setSelected("squad")}
+                  className={cn(
+                    "w-full text-left rounded-md px-2.5 py-2 flex items-start gap-2.5 transition-colors border border-dashed border-border",
+                    selected === "squad" ? "bg-primary/10" : "hover:bg-muted/60",
+                  )}
+                >
+                  <div className="h-9 w-9 rounded-full bg-accent flex items-center justify-center ring-1 ring-border shrink-0">
+                    <ShieldQuestion className="h-4.5 w-4.5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-serif text-sm leading-tight truncate">Commissariat</p>
+                    <p className="text-[11px] text-muted-foreground truncate">
+                      {squadInfo.last
+                        ? (squadInfo.last.content.startsWith(QUESTION_PREFIX)
+                            ? `❓ ${squadInfo.last.content.slice(QUESTION_PREFIX.length)}`
+                            : squadInfo.last.content)
+                        : "Canal des enquêteurs"}
+                    </p>
+                    <p className="font-mono text-[10px] text-muted-foreground mt-0.5">
+                      {squadInfo.questionsUsed}/{MAX_QUESTIONS} questions · {squadInfo.count} msg
+                    </p>
+                  </div>
+                </button>
+              </li>
               {threads.map((t) => {
                 const c = charactersById[t.id];
                 const active = selected === t.id;
@@ -179,6 +224,79 @@ function GmHelpPage() {
             <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground italic px-6 text-center">
               Sélectionne un invité pour lire et répondre à sa demande.
             </div>
+          ) : selected === "squad" ? (
+            <>
+              <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center ring-1 ring-border">
+                  <ShieldQuestion className="h-4 w-4" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-serif text-lg leading-none">Commissariat — canal des enquêteurs</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Tu réponds en tant que <strong>Commissaire</strong> — uniquement par oui ou non aux questions.
+                  </p>
+                </div>
+                <span className={cn(
+                  "font-mono text-[11px] px-2 py-1 rounded-md border",
+                  squadInfo.questionsUsed >= MAX_QUESTIONS
+                    ? "border-destructive text-destructive"
+                    : "border-border text-muted-foreground",
+                )}>
+                  {squadInfo.questionsUsed}/{MAX_QUESTIONS} questions
+                </span>
+              </div>
+
+              <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3 space-y-2">
+                {threadMessages.map((m) => {
+                  const isStaff = m.sender_character_id === "gm" || m.sender_character_id === "system";
+                  const isQuestion = m.content.startsWith(QUESTION_PREFIX);
+                  const displayed = isQuestion ? m.content.slice(QUESTION_PREFIX.length) : m.content;
+                  return (
+                    <div key={m.id} className={cn("flex", isStaff ? "justify-end" : "justify-start")}>
+                      <div className="max-w-[80%]">
+                        {!isStaff && (
+                          <p className="text-[11px] text-muted-foreground ml-2 mb-0.5 font-medium">
+                            {m.sender_display_name}
+                          </p>
+                        )}
+                        <div className={cn(
+                          "rounded-2xl px-3.5 py-2 text-[14px] leading-snug shadow-paper",
+                          isStaff
+                            ? "bg-primary text-primary-foreground rounded-br-sm"
+                            : "bg-card text-foreground border border-border rounded-bl-sm",
+                        )}>
+                          {isQuestion && (
+                            <span className={cn(
+                              "inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider mb-1 rounded px-1.5 py-0.5",
+                              isStaff ? "bg-primary-foreground/20" : "bg-muted",
+                            )}>
+                              <HelpCircle className="h-3 w-3" /> Question
+                            </span>
+                          )}
+                          <p>{displayed}</p>
+                        </div>
+                        <p className={cn("text-[10px] text-muted-foreground mt-0.5 font-mono", isStaff ? "text-right mr-1" : "ml-2")}>
+                          {formatTime(m.created_at)}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <form onSubmit={send} className="flex items-center gap-2 border-t border-border px-3 py-2.5">
+                <Input
+                  value={draft}
+                  onChange={(e) => setDraft(e.target.value)}
+                  placeholder="Répondre (oui / non)…"
+                  className="flex-1 bg-background"
+                  maxLength={500}
+                />
+                <Button type="submit" size="icon" disabled={sending || !draft.trim()}>
+                  {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                </Button>
+              </form>
+            </>
           ) : (
             <>
               <div className="px-4 py-3 border-b border-border flex items-center gap-2">
