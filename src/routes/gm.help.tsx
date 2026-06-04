@@ -1,12 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LifeBuoy, Loader2, Send } from "lucide-react";
+import { HelpCircle, LifeBuoy, Loader2, Send, ShieldQuestion } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { charactersById, type CharacterId } from "@/data/mock";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+const SQUAD_CHANNEL = "squad:investigators";
+const QUESTION_PREFIX = "[Q] ";
+const MAX_QUESTIONS = 3;
+type Selected = CharacterId | "squad" | null;
 
 export const Route = createFileRoute("/gm/help")({
   head: () => ({ meta: [{ title: "Boîte d'aide — Game Master" }] }),
