@@ -200,6 +200,27 @@ export type Database = {
         }
         Relationships: []
       }
+      suspect_statuses: {
+        Row: {
+          investigator_character_id: string
+          status: string
+          target_character_id: string
+          updated_at: string
+        }
+        Insert: {
+          investigator_character_id: string
+          status?: string
+          target_character_id: string
+          updated_at?: string
+        }
+        Update: {
+          investigator_character_id?: string
+          status?: string
+          target_character_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       timeline_events: {
         Row: {
           created_at: string
