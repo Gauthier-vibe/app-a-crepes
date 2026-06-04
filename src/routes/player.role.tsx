@@ -382,6 +382,9 @@ function DefaultRolePanel({ character }: { character: Character }) {
       </div>
     </div>
   );
+}
+
+
 
 /* ====================== SUSPECT STATUS PICKER ====================== */
 
