@@ -99,6 +99,7 @@ function RolePage() {
 function InvestigatorPanel({ character }: { character: Character }) {
   const { revealed } = useRevealedClues();
   const [notes, setNotes] = useState("");
+  const { statusOf, setStatus } = useSuspectStatuses(character.id);
 
   useEffect(() => {
     const saved = localStorage.getItem(`mp:notes:${character.id}`);
@@ -112,16 +113,25 @@ function InvestigatorPanel({ character }: { character: Character }) {
 
   const revealedChars = revealed.map((id) => charactersById[id]).filter((c) => c && !c.isInvestigator);
 
+  const suspectsList = characters
+    .filter((c) => !c.isInvestigator && c.id !== character.id)
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+  const coupableCount = suspectsList.filter((c) => statusOf(c.id) === "coupable").length;
+
   return (
     <Tabs defaultValue="clues" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="clues">
           <KeyRound className="h-4 w-4 mr-1.5" />
           Indices ({revealedChars.length})
         </TabsTrigger>
+        <TabsTrigger value="suspects">
+          <Users className="h-4 w-4 mr-1.5" />
+          Suspects{coupableCount > 0 ? ` (${coupableCount})` : ""}
+        </TabsTrigger>
         <TabsTrigger value="notes">
           <NotebookPen className="h-4 w-4 mr-1.5" />
-          Mes notes
+          Notes
         </TabsTrigger>
       </TabsList>
 
