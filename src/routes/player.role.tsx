@@ -382,4 +382,56 @@ function DefaultRolePanel({ character }: { character: Character }) {
       </div>
     </div>
   );
+
+/* ====================== SUSPECT STATUS PICKER ====================== */
+
+const SUSPECT_OPTIONS: { value: SuspectStatus; label: string; activeClass: string }[] = [
+  {
+    value: "coupable",
+    label: "Coupable",
+    activeClass: "bg-destructive text-destructive-foreground border-destructive",
+  },
+  {
+    value: "suspect",
+    label: "Suspect",
+    activeClass: "bg-muted text-foreground border-border",
+  },
+  {
+    value: "innocent",
+    label: "Innocent",
+    activeClass: "bg-accent text-accent-foreground border-accent",
+  },
+];
+
+function SuspectStatusPicker({
+  value,
+  onChange,
+}: {
+  value: SuspectStatus;
+  onChange: (s: SuspectStatus) => void;
+}) {
+  return (
+    <div className="inline-flex rounded-md border border-border overflow-hidden shrink-0">
+      {SUSPECT_OPTIONS.map((opt) => {
+        const active = opt.value === value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              "px-2 py-1 text-[10px] font-mono uppercase tracking-wider transition-colors border-r last:border-r-0 border-border",
+              active
+                ? opt.activeClass
+                : "bg-background text-muted-foreground hover:bg-muted/60",
+            )}
+            aria-pressed={active}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
+
