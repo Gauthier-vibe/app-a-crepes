@@ -157,6 +157,33 @@ function GmHelpPage() {
             </p>
           ) : (
             <ul className="space-y-1">
+              {/* Squad thread (always shown at top) */}
+              <li>
+                <button
+                  onClick={() => setSelected("squad")}
+                  className={cn(
+                    "w-full text-left rounded-md px-2.5 py-2 flex items-start gap-2.5 transition-colors border border-dashed border-border",
+                    selected === "squad" ? "bg-primary/10" : "hover:bg-muted/60",
+                  )}
+                >
+                  <div className="h-9 w-9 rounded-full bg-accent flex items-center justify-center ring-1 ring-border shrink-0">
+                    <ShieldQuestion className="h-4.5 w-4.5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-serif text-sm leading-tight truncate">Commissariat</p>
+                    <p className="text-[11px] text-muted-foreground truncate">
+                      {squadInfo.last
+                        ? (squadInfo.last.content.startsWith(QUESTION_PREFIX)
+                            ? `❓ ${squadInfo.last.content.slice(QUESTION_PREFIX.length)}`
+                            : squadInfo.last.content)
+                        : "Canal des enquêteurs"}
+                    </p>
+                    <p className="font-mono text-[10px] text-muted-foreground mt-0.5">
+                      {squadInfo.questionsUsed}/{MAX_QUESTIONS} questions · {squadInfo.count} msg
+                    </p>
+                  </div>
+                </button>
+              </li>
               {threads.map((t) => {
                 const c = charactersById[t.id];
                 const active = selected === t.id;
