@@ -173,6 +173,41 @@ function InvestigatorPanel({ character }: { character: Character }) {
         )}
       </TabsContent>
 
+      <TabsContent value="suspects" className="mt-4">
+        <p className="text-xs text-muted-foreground mb-3">
+          Classe les invités au fil de ton enquête. Cette liste reste personnelle.
+        </p>
+        <ul className="space-y-2">
+          {suspectsList.map((c) => {
+            const current = statusOf(c.id);
+            return (
+              <li
+                key={c.id}
+                className="paper-texture rounded-xl border border-border shadow-paper p-3 flex items-center gap-3"
+              >
+                <img
+                  src={c.image}
+                  alt={c.name}
+                  width={80}
+                  height={80}
+                  className="h-11 w-11 rounded-full object-cover ring-1 ring-border shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-serif text-base leading-tight truncate">{c.name}</p>
+                  <p className="text-[11px] text-muted-foreground italic truncate">{c.profession}</p>
+                </div>
+                <SuspectStatusPicker
+                  value={current}
+                  onChange={(s) => setStatus(c.id, s)}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </TabsContent>
+
+
+
       <TabsContent value="notes" className="mt-4">
         <div className="mb-3 flex items-end justify-between gap-3">
           <p className="text-sm text-muted-foreground">Sauvegardé sur cet appareil.</p>
