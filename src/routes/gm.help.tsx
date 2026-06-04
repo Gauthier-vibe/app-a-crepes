@@ -39,14 +39,14 @@ function GmHelpPage() {
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Load all help:* messages + subscribe
+  // Load all help:* and squad messages + subscribe
   useEffect(() => {
     let mounted = true;
     (async () => {
       const { data, error } = await supabase
         .from("chat_messages")
         .select("*")
-        .like("channel", "help:%")
+        .or(`channel.like.help:%,channel.eq.${SQUAD_CHANNEL}`)
         .order("created_at", { ascending: true })
         .limit(2000);
       if (!mounted) return;
@@ -62,7 +62,7 @@ function GmHelpPage() {
         { event: "INSERT", schema: "public", table: "chat_messages" },
         (payload) => {
           const next = payload.new as LiveMessage;
-          if (!next.channel?.startsWith("help:")) return;
+          if (!next.channel?.startsWith("help:") && next.channel !== SQUAD_CHANNEL) return;
           setMessages((m) => (m.some((x) => x.id === next.id) ? m : [...m, next]));
         },
       )
@@ -74,9 +74,20 @@ function GmHelpPage() {
     };
   }, []);
 
+  const squadInfo = useMemo(() => {
+    const squadMessages = messages.filter((m) => m.channel === SQUAD_CHANNEL);
+    const last = squadMessages[squadMessages.length - 1];
+    const questionsUsed = squadMessages.filter((m) => {
+      const sender = charactersById[m.sender_character_id as CharacterId];
+      return sender?.isInvestigator && m.content.startsWith(QUESTION_PREFIX);
+    }).length;
+    return { count: squadMessages.length, last, questionsUsed };
+  }, [messages]);
+
   const threads = useMemo(() => {
     const map = new Map<CharacterId, { last: LiveMessage; count: number }>();
     for (const m of messages) {
+      if (!m.channel.startsWith("help:")) continue;
       const id = m.channel.replace("help:", "") as CharacterId;
       if (!charactersById[id]) continue;
       const cur = map.get(id);
@@ -91,10 +102,11 @@ function GmHelpPage() {
       .sort((a, b) => +new Date(b.last.created_at) - +new Date(a.last.created_at));
   }, [messages]);
 
-  const threadMessages = useMemo(
-    () => (selected ? messages.filter((m) => m.channel === `help:${selected}`) : []),
-    [messages, selected],
-  );
+  const threadMessages = useMemo(() => {
+    if (!selected) return [];
+    const channel = selected === "squad" ? SQUAD_CHANNEL : `help:${selected}`;
+    return messages.filter((m) => m.channel === channel);
+  }, [messages, selected]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -107,10 +119,11 @@ function GmHelpPage() {
     if (!value || sending) return;
     setSending(true);
     setDraft("");
+    const isSquad = selected === "squad";
     const { error } = await supabase.from("chat_messages").insert({
-      channel: `help:${selected}`,
+      channel: isSquad ? SQUAD_CHANNEL : `help:${selected}`,
       sender_character_id: "gm",
-      sender_display_name: "Organisation",
+      sender_display_name: isSquad ? "Commissaire" : "Organisation",
       content: value,
     });
     if (error) {
