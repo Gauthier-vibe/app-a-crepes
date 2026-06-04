@@ -34,7 +34,7 @@ function formatTime(iso: string) {
 function GmHelpPage() {
   const [messages, setMessages] = useState<LiveMessage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<CharacterId | null>(null);
+  const [selected, setSelected] = useState<Selected>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
