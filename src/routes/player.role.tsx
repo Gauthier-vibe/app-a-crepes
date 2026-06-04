@@ -10,9 +10,13 @@ import {
   Save,
   Send,
   Sparkles,
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useSuspectStatuses, type SuspectStatus } from "@/hooks/useSuspectStatuses";
+import { characters } from "@/data/mock";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
