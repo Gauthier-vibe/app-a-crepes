@@ -10,9 +10,13 @@ import {
   Save,
   Send,
   Sparkles,
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useSuspectStatuses, type SuspectStatus } from "@/hooks/useSuspectStatuses";
+import { characters } from "@/data/mock";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useCurrentCharacter } from "@/hooks/useCurrentCharacter";
@@ -95,6 +99,7 @@ function RolePage() {
 function InvestigatorPanel({ character }: { character: Character }) {
   const { revealed } = useRevealedClues();
   const [notes, setNotes] = useState("");
+  const { statusOf, setStatus } = useSuspectStatuses(character.id);
 
   useEffect(() => {
     const saved = localStorage.getItem(`mp:notes:${character.id}`);
@@ -108,16 +113,25 @@ function InvestigatorPanel({ character }: { character: Character }) {
 
   const revealedChars = revealed.map((id) => charactersById[id]).filter((c) => c && !c.isInvestigator);
 
+  const suspectsList = characters
+    .filter((c) => !c.isInvestigator && c.id !== character.id)
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+  const coupableCount = suspectsList.filter((c) => statusOf(c.id) === "coupable").length;
+
   return (
     <Tabs defaultValue="clues" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="clues">
           <KeyRound className="h-4 w-4 mr-1.5" />
           Indices ({revealedChars.length})
         </TabsTrigger>
+        <TabsTrigger value="suspects">
+          <Users className="h-4 w-4 mr-1.5" />
+          Suspects{coupableCount > 0 ? ` (${coupableCount})` : ""}
+        </TabsTrigger>
         <TabsTrigger value="notes">
           <NotebookPen className="h-4 w-4 mr-1.5" />
-          Mes notes
+          Notes
         </TabsTrigger>
       </TabsList>
 
@@ -158,6 +172,41 @@ function InvestigatorPanel({ character }: { character: Character }) {
           </ul>
         )}
       </TabsContent>
+
+      <TabsContent value="suspects" className="mt-4">
+        <p className="text-xs text-muted-foreground mb-3">
+          Classe les invités au fil de ton enquête. Cette liste reste personnelle.
+        </p>
+        <ul className="space-y-2">
+          {suspectsList.map((c) => {
+            const current = statusOf(c.id);
+            return (
+              <li
+                key={c.id}
+                className="paper-texture rounded-xl border border-border shadow-paper p-3 flex items-center gap-3"
+              >
+                <img
+                  src={c.image}
+                  alt={c.name}
+                  width={80}
+                  height={80}
+                  className="h-11 w-11 rounded-full object-cover ring-1 ring-border shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-serif text-base leading-tight truncate">{c.name}</p>
+                  <p className="text-[11px] text-muted-foreground italic truncate">{c.profession}</p>
+                </div>
+                <SuspectStatusPicker
+                  value={current}
+                  onChange={(s) => setStatus(c.id, s)}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </TabsContent>
+
+
 
       <TabsContent value="notes" className="mt-4">
         <div className="mb-3 flex items-end justify-between gap-3">
@@ -334,3 +383,58 @@ function DefaultRolePanel({ character }: { character: Character }) {
     </div>
   );
 }
+
+
+
+/* ====================== SUSPECT STATUS PICKER ====================== */
+
+const SUSPECT_OPTIONS: { value: SuspectStatus; label: string; activeClass: string }[] = [
+  {
+    value: "coupable",
+    label: "Coupable",
+    activeClass: "bg-destructive text-destructive-foreground border-destructive",
+  },
+  {
+    value: "suspect",
+    label: "Suspect",
+    activeClass: "bg-muted text-foreground border-border",
+  },
+  {
+    value: "innocent",
+    label: "Innocent",
+    activeClass: "bg-accent text-accent-foreground border-accent",
+  },
+];
+
+function SuspectStatusPicker({
+  value,
+  onChange,
+}: {
+  value: SuspectStatus;
+  onChange: (s: SuspectStatus) => void;
+}) {
+  return (
+    <div className="inline-flex rounded-md border border-border overflow-hidden shrink-0">
+      {SUSPECT_OPTIONS.map((opt) => {
+        const active = opt.value === value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              "px-2 py-1 text-[10px] font-mono uppercase tracking-wider transition-colors border-r last:border-r-0 border-border",
+              active
+                ? opt.activeClass
+                : "bg-background text-muted-foreground hover:bg-muted/60",
+            )}
+            aria-pressed={active}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+

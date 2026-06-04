@@ -1,26 +1,43 @@
-## Problème
+## Objectif
 
-`src/routes/gm.chat.tsx` utilise un tableau mock (`messages as seed` depuis `@/data/mock`) et ne lit / n'écrit jamais dans la table `chat_messages`. Du coup la console d'administration affiche un faux fil et les messages réels postés par les joueurs (via `/player/chat` sur le canal `global`) n'apparaissent pas.
+Ajouter un 3ᵉ onglet « Suspects » dans `/player/role` pour les enquêteurs, listant tous les personnages non-enquêteurs avec une catégorisation personnelle : **Coupable potentiel**, **Suspect** (défaut), **Innocent**. La liste est propre à chaque enquêteur et persistée côté backend (synchronisée entre appareils).
 
-## Correctif
+## Modèle de données
 
-Réécrire `src/routes/gm.chat.tsx` sur le même modèle que `src/routes/player/chat.tsx` :
+Nouvelle table `suspect_statuses` :
+- `investigator_character_id` (text)
+- `target_character_id` (text)
+- `status` (text — `coupable` | `suspect` | `innocent`)
+- `updated_at` (timestamptz)
+- PK composite `(investigator_character_id, target_character_id)`
+- RLS publique (cohérent avec les autres tables du projet)
+- GRANTs `anon` + `authenticated` + `service_role`
 
-1. **Lecture initiale** : `supabase.from("chat_messages").select("*").eq("channel","global").order("created_at").limit(500)`.
-2. **Realtime** : abonnement `postgres_changes` INSERT sur `chat_messages` filtré `channel=eq.global`, ajout déduppé dans le state.
-3. **Rendu** : réutiliser le style existant (bulles `system`, `corbeau`, joueurs avec avatar via `charactersById`, fallback `sender_display_name`), prise en charge des images (`image_url`) comme dans le chat joueur.
-4. **Publication du Corbeau** : le formulaire insère désormais dans `chat_messages` avec `channel:"global"`, `sender_character_id:"corbeau"`, `sender_display_name:"Le Corbeau"`, `content:value` (au lieu de muter le state local).
-5. **Annonce système** : bouton "Diffuser une annonce" → insert avec `sender_character_id:"system"`, `sender_display_name:"Système"`, `content:"🔔 …"`.
-6. Loader d'attente et message vide ("Aucun message pour l'instant"), scroll auto en bas à chaque nouveau message.
+Pas de ligne créée par défaut : l'absence de ligne = `suspect`. L'upsert ne se fait qu'au premier changement.
 
-Aucune migration nécessaire : la table `chat_messages` et ses policies publiques existent déjà, et `/player/chat` envoie déjà sur le canal `global`.
+## Frontend
+
+**Nouveau hook** `src/hooks/useSuspectStatuses.ts`
+- Pattern partagé (même structure que `useCharacterSettings`) : `useSyncExternalStore` + un seul canal realtime `suspect_statuses:shared`.
+- API : `useSuspectStatuses(investigatorId)` → `{ statusOf(targetId), setStatus(targetId, status), loading }`.
+
+**`src/routes/player.role.tsx`** — `InvestigatorPanel`
+- Ajouter un 3ᵉ onglet `suspects` dans le `TabsList` (icône `Users`/`Search`).
+- Contenu : liste de tous les personnages où `!isInvestigator && id !== character.id`, triés alphabétiquement.
+- Chaque ligne : avatar, nom, profession, et un petit groupe de 3 boutons segmentés (Coupable / Suspect / Innocent) avec couleurs sémantiques :
+  - Coupable → rouge (`destructive`)
+  - Suspect → neutre (défaut, badge `secondary`)
+  - Innocent → vert (token existant ou `accent`)
+- Compteur dans le label du tab : nombre de « coupable potentiel » marqués.
+
+## Détails techniques
+
+- Realtime via `postgres_changes` sur `suspect_statuses` (insert/update/delete dédupé par `(investigator, target)`).
+- Optimistic update local avant retour serveur pour la réactivité.
+- Aucun changement aux autres onglets, aucun changement aux pages joueur non-enquêteur.
 
 ## Fichiers touchés
 
-- `src/routes/gm.chat.tsx` (réécriture)
-
-## Vérification
-
-- Ouvrir `/gm/chat` : les messages déjà postés par les joueurs sur le salon commun apparaissent ; un nouveau message envoyé depuis `/player/chat` s'affiche en direct.
-- Publier un message du Corbeau depuis le GM → il apparaît côté joueur instantanément.
-- Diffuser une annonce → bulle système visible des deux côtés.
+- migration SQL (nouvelle table + RLS + GRANTs)
+- `src/hooks/useSuspectStatuses.ts` (nouveau)
+- `src/routes/player.role.tsx` (ajout onglet Suspects)
